@@ -11,7 +11,7 @@ export default function Register() {
 
     return (
         <div className="overflow-hidden min-h-dvh"> 
-            <main className="w-full p-4 max-w-sm"> 
+            <main className="w-full p-4 max-w-sm mx-auto"> 
                 <h1 className="text-left font-bold text-2xl"> REGISTER </h1>
                 
                 <form> 
@@ -40,7 +40,7 @@ export default function Register() {
                         onChange={(e)=> setEmail(e.target.value)}
                         />  
 
-                        <button className="btn" type="submit"> REGISTER </button>
+                        <button className="btn" type="submit"> Register</button>
                     </div>
                 </form> 
 

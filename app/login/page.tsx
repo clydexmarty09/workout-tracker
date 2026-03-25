@@ -9,7 +9,7 @@ export default function Login() {
 
     return(
          <div className="overflow-hidden min-h-dvh"> 
-            <main className="w-full p-4 max-w-sm"> 
+            <main className="w-full p-4 max-w-sm mx-auto"> 
                 <h1 className="text-left font-bold text-2xl"> LOGIN </h1>
                 
                 <form> 
@@ -33,6 +33,8 @@ export default function Login() {
                         <button className="btn"> Log In</button>
                     </div>
                 </form>
+
+                <p><Link href="register" className="text-blue-500"> Register</Link> instead </p>
             </main> 
         </div> 
     )

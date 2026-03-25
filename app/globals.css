@@ -14,7 +14,7 @@
 
 @layer components {
   .btn {
-    @apply text-center bg-blue-400/70 text-sm w-full p-1 border rounded-md border-gray-700;
+    @apply font-semibold text-center bg-blue-400/70 text-sm w-full p-1 border rounded-md border-gray-700;
   }
 
   .input {

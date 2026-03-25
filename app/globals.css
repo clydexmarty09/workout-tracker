@@ -16,6 +16,10 @@
   .btn {
     @apply text-center bg-blue-400/70 text-sm w-full p-1 border rounded-md border-gray-700;
   }
+
+  .input {
+    @apply p-1 border border-gray-500 rounded-md w-full; 
+  }
 }
 
 @media (prefers-color-scheme: dark) {

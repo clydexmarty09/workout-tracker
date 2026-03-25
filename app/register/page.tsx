@@ -17,7 +17,7 @@ export default function Register() {
                 <form> 
                     <div className="gap-2 flex flex-col"> 
                         <input
-                        className="p-1 border border-gray-500 rounded-md w-full"
+                        className="input"
                         type="text"
                         placeholder="Username"
                         value={user}
@@ -25,7 +25,7 @@ export default function Register() {
                         />
 
                         <input
-                        className="p-1 border border-gray-500 rounded-md w-full"
+                        className="input"
                         type="text"
                         placeholder="Password"
                         value={pw}
@@ -33,7 +33,7 @@ export default function Register() {
                         />
 
                         <input
-                        className="p-1 border border-gray-500 rounded-md w-full"
+                        className="input"
                         type="email"
                         placeholder="Email Address"
                         value={email}

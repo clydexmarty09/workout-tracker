@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const res = await db.query(
       `SELECT id, username, email, password_hash
             FROM users
-            WHERE username = $1 OR email = $2
+            WHERE username = $1 OR email = $1
             LIMIT 1`,
       [login],
     );

@@ -9,8 +9,8 @@ export default function Home() {
         <p className="text-center text-xs text-gray-300 py-4"> Track your workouts, check your progress, and set goals. </p>
         
         <div className="w-full items-center absolute bottom-4 left-0 flex flex-col gap-4 py-3 px-3">
-          <Link className="btn" href="register"> REGISTER </Link>
-          <Link className="btn" href="sign-in"> SIGN IN</Link>
+          <Link className="btn" href="/register"> REGISTER </Link>
+          <Link className="btn" href="/login"> SIGN IN</Link>
         </div> 
       </main>
     </div>

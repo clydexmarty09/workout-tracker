@@ -52,11 +52,11 @@ export async function POST(request: Request) {
     const response = NextResponse.json({ ok: true, userId: user.id });
 
     response.cookies.set("sessionId", sessionId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      httpOnly: true, // frontend JS cannot read the cookie with document.cookie
+      secure: process.env.NODE_ENV === "production", // send over https
+      sameSite: "lax", // CSRF protection
       expires: expires_at,
-      path: "/",
+      path: "/", // cookies is available across all app
     });
 
     return response;

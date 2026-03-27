@@ -35,6 +35,36 @@ export default function DashBoard() {
         }
     }
 
+    async function handleSaveWorkout() {
+        try {   
+            const res = await fetch("/api/wotkouts", {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ name: workoutName, label:workoutLabel }), 
+            }); 
+
+            const data = await res.json(); 
+            if(!res.ok) {
+                console.error(data.error || "Failed to save workout")
+                return null; 
+            }
+
+            //success : close the form and clear inputs 
+            setShowAddWorkout(false); 
+            setWorkoutName(""); 
+            setWorkoutLabel(""); 
+            setExerciseSearch(""); 
+            setExerciseResults([]); 
+            setSelectedExercises([]); 
+
+
+        } catch (error) {
+            console.error("Failed to save workout", error); 
+        }
+    }
+
     function handleAddExercise(exercise: Exercise) {
         
         setSelectedExercises((prev)=> {
@@ -134,7 +164,12 @@ export default function DashBoard() {
                                 > Cancel 
                                 </button>
 
-                                <button> Continue </button>
+                                <button
+                                type="button"
+                                onClick={handleSaveWorkout}
+                                > Save Workout 
+                                </button>
+                           
                             </div> 
                         </div>
                     )}

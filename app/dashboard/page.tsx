@@ -38,8 +38,8 @@ export default function DashBoard() {
     return(
         <div> 
             <main> 
-                <div> 
-                    {!showAddWorkout ? (
+                <div> {/* {condition} ? (if condition is true, do this) : (else, do this) */}
+                    {!showAddWorkout ? ( 
                         <button onClick={()=>setShowAddWorkout(true)}> Add Workout </button>
                     ) : (
                         <div> 
@@ -59,10 +59,40 @@ export default function DashBoard() {
                              onChange={(e)=> setWorkoutLabel(e.target.value)}
                              />
 
-                             <div> 
-                                <button> Cancel </button>
-                                <button> Continue </button>
+
+                             <div> {/* Search area */ }
+                                <input
+                                value={exerciseSearch}
+                                type="text"
+                                placeholder="Search Exercise"
+                                onChange={(e)=> setExerciseSearch(e.target.value)}
+                                />
+
+                                <button type="button" onClick={handleExerciseSearch}> Search </button>
                             </div>
+                            
+                            <div>  {/* Results area */ }
+                                {exerciseResults.map((exercise)=> (
+                                    <div key={exercise.id}> 
+                                        <p> {exercise.name} </p>
+                                    </div> 
+                                ))}
+                            </div> 
+                             
+                             <div> 
+                                
+                                <button
+                                onClick = {()=>{
+                                    setShowAddWorkout(false); 
+                                    setWorkoutName(""); 
+                                    setWorkoutLabel(""); 
+                                    setExerciseSearch(""); 
+                                }}
+                                > Cancel 
+                                </button>
+
+                                <button> Continue </button>
+                            </div> 
                         </div>
                     )}
                 </div>

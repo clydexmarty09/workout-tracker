@@ -5,11 +5,18 @@ import { NextResponse } from "next/server";
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, label } = body;
+    const { name, label, exerciseIds } = body;
 
     if (!name) {
       return NextResponse.json(
         { error: "Workout name required" },
+        { status: 400 },
+      );
+    }
+
+    if (!Array.isArray(exerciseIds)) {
+      return NextResponse.json(
+        { error: "ExercisesIds must be an array" },
         { status: 400 },
       );
     }
@@ -19,6 +26,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // insert workout
     const result = await db.query(
       `INSERT INTO workouts (user_id, name, label)
             VALUES ($1, $2, $3)
@@ -26,7 +34,19 @@ export async function POST(request: Request) {
       [userId, name, label || null],
     );
 
-    return NextResponse.json(result.rows[0], { status: 201 });
+    const workout = result.rows[0];
+    const workoutId = workout.id;
+
+    // insert linked exercises
+    for (const exerciseId of exerciseIds) {
+      await db.query(
+        `INSERT INTO workout_exercises (workout_id, exercise_id)
+        VALUES ($1, $2)`,
+        [workoutId, exerciseId],
+      );
+    }
+
+    return NextResponse.json(workout, { status: 201 });
   } catch (error) {
     console.error("Cannot create workout", error);
     return NextResponse.json(

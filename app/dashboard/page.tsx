@@ -42,7 +42,9 @@ export default function DashBoard() {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name: workoutName, label:workoutLabel }), 
+                body: JSON.stringify({ name: workoutName, label:workoutLabel, 
+                    exerciseIds: selectedExercises.map((exercise)=> exercise.id), 
+                 }), 
             }); 
 
             const data = await res.json(); 

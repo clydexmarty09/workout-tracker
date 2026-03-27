@@ -36,7 +36,16 @@ export default function DashBoard() {
     }
 
     function handleAddExercise(exercise: Exercise) {
-        setSelectedExercises((prev)=> [...prev, exercise]); // create a new array, inserting the new exercise at the end of the old exercise array 
+        
+        setSelectedExercises((prev)=> {
+            const exists = prev.some((item)=> item.id === exercise.id);  // check for duplicates 
+
+            if(exists) {
+                return prev; 
+            }
+
+            return [...prev, exercise]; 
+        }); 
     }
 
     function handleRemove(id: Number) {
@@ -82,8 +91,10 @@ export default function DashBoard() {
                             </div>
                             
                             <div>  {/* Results area */ }
+                                <h3> Search Results </h3>
                                 {exerciseResults.map((exercise)=> (
                                     <div key={exercise.id}> 
+                                        
                                         <p> {exercise.name} </p>
                                         <button
                                         type="button"

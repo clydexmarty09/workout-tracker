@@ -35,6 +35,16 @@ export default function DashBoard() {
         }
     }
 
+    function handleAddExercise(exercise: Exercise) {
+        setSelectedExercises((prev)=> [...prev, exercise]); // create a new array, inserting the new exercise at the end of the old exercise array 
+    }
+
+    function handleRemove(id: Number) {
+        setSelectedExercises((prev) => 
+         prev.filter((exercise) => exercise.id !== id)  // only keep the exercises whose id does not match the one we want to remove 
+     ); 
+    }
+
     return(
         <div> 
             <main> 
@@ -75,9 +85,31 @@ export default function DashBoard() {
                                 {exerciseResults.map((exercise)=> (
                                     <div key={exercise.id}> 
                                         <p> {exercise.name} </p>
+                                        <button
+                                        type="button"
+                                        onClick={()=> handleAddExercise(exercise)}
+                                        > 
+                                        Add
+                                        </button>
                                     </div> 
                                 ))}
                             </div> 
+
+                            <div> {/* show selected exercises */}
+                                <h3> Selected Exercises </h3>
+                                {selectedExercises.map((exercise)=> (
+                                    <div key={exercise.id}> 
+                                        <p> {exercise.name} </p>
+
+                                        <button
+                                        onClick={()=> handleRemove(exercise.id)}
+                                        type="button"
+                                        > 
+                                        Remove
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
                              
                              <div> 
                                 

@@ -7,6 +7,12 @@ type Exercise = {
     name: string; 
 }
 
+type Workout = {
+    id: number; 
+    name: string; 
+    label: string | null; 
+}
+
 export default function DashBoard() {
 
     const [showAddWorkout, setShowAddWorkout] = useState(false); 
@@ -15,6 +21,8 @@ export default function DashBoard() {
     const [exerciseSearch, setExerciseSearch] = useState("") // stores whatever the user types in the search box 
     const [exerciseResults, setExerciseResults] = useState<Exercise[]>([]);  // stores the matches the come back from API route
     const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([])  // stores the exercises the user picked for workout
+    const [workouts, setWorkouts] = useState<Workout[]>([]); 
+    const [loading, setLoading] = useState(false); 
 
     // Frontend -> API -> DB -> API -> frontend 
     async function handleExerciseSearch() {
@@ -35,9 +43,22 @@ export default function DashBoard() {
         }
     }
 
+    // displays the workouts saved. 
+    async function fetchWorkouts() {
+        try {
+
+            const res = await fetch("/api/workouts"); 
+            const data = await res.json();
+            
+            setWorkouts(data); 
+
+        } catch (error) {
+            console.error("Failed to fetch workouts", error)
+        }
+    }
     async function handleSaveWorkout() {
         try {   
-            const res = await fetch("/api/wotkouts", {
+            const res = await fetch("/api/workouts", {
                 method: "POST", 
                 headers: {
                     "Content-Type": "application/json"
@@ -80,7 +101,7 @@ export default function DashBoard() {
         }); 
     }
 
-    function handleRemove(id: Number) {
+    function handleRemove(id: number) {
         setSelectedExercises((prev) => 
          prev.filter((exercise) => exercise.id !== id)  // only keep the exercises whose id does not match the one we want to remove 
      ); 
@@ -162,6 +183,8 @@ export default function DashBoard() {
                                     setWorkoutName(""); 
                                     setWorkoutLabel(""); 
                                     setExerciseSearch(""); 
+                                    setExerciseResults([]); 
+                                    setSelectedExercises([]); 
                                 }}
                                 > Cancel 
                                 </button>
@@ -171,6 +194,21 @@ export default function DashBoard() {
                                 onClick={handleSaveWorkout}
                                 > Save Workout 
                                 </button>
+
+                                <div>
+                                    <button
+                                    type="button"
+                                    onClick={fetchWorkouts}
+                                    >
+                                        Show Workouts
+                                    </button>
+
+                                    {workouts.map((w:any) => (
+                                        <div key={w.id}>
+                                            <h2> {w.name} </h2>
+                                        </div> 
+                                    ))}
+                                </div>
                            
                             </div> 
                         </div>

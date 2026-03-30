@@ -2,6 +2,29 @@ import { getLoggedInUserId } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 
+export async function GET(request: Request) {
+  try {
+    const userId = await getLoggedInUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "Not autheticated" }, { status: 401 });
+    }
+
+    const res = await db.query(
+      `SELECT * FROM workouts WHERE user_id = $1
+      ORDER BY created_at DESC`,
+      [userId],
+    );
+
+    return NextResponse.json(res.rows);
+  } catch (error) {
+    console.error("Failed to fetch workout", error);
+
+    return NextResponse.json(
+      { error: "Failed to fetch workout" },
+      { status: 500 },
+    );
+  }
+}
 export async function POST(request: Request) {
   try {
     const body = await request.json();

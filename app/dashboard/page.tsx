@@ -54,6 +54,8 @@ export default function DashBoard() {
 
             const res = await fetch("/api/workouts"); 
             const data = await res.json();
+            console.log(data)
+           
 
             if(!res.ok) {
                 setError(data.error || "Failed to fetch workouts"); 
@@ -214,14 +216,21 @@ export default function DashBoard() {
                                     >
                                         Show Workouts
                                     </button>
+                                   
                                     { loading ?  (<p> Loading... </p>) : 
                                     workouts.length === 0 ? 
                                     (<p> No workouts yet</p>) : 
                                     ( workouts.map((w:any) => (
                                         <div key={w.id}>
                                             <h2> {w.name} </h2>
+                                            
+                                            {w.exercises?.map((ex:any)=> (
+                                                <p key={ex.id}> - {ex.name}</p>
+                                            ))}
+                                      
                                         </div> 
                                     )))}
+                               
                                 </div>
                            
                             </div> 

@@ -9,13 +9,54 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Not autheticated" }, { status: 401 });
     }
 
+    // get workouts and linked exercises
+    // get all workouts from the logged in user, and get the exercises linked to each workout
     const res = await db.query(
-      `SELECT * FROM workouts WHERE user_id = $1
-      ORDER BY created_at DESC`,
+      `SELECT
+        workouts.id AS workout_id,  
+        workouts.name AS workout_name, 
+        workouts.label AS workout_label, 
+        exercises.id AS exercise_id, 
+        exercises.name AS exercise_name
+        FROM workouts  
+        LEFT JOIN workout_exercises
+          ON workouts.id = workout_exercises.workout_id
+        LEFT JOIN exercises
+          ON workout_exercises.exercise_id = exercises.id
+        WHERE workouts.user_id = $1
+        ORDER BY workouts.created_at DESC`,
       [userId],
     );
 
-    return NextResponse.json(res.rows);
+    // a Record is a built-in TypeScript type: an object with keys and values
+    // Record<KEY_TYPE, VALUE_TYPE>
+    const workoutsMap: Record<string, any> = {}; // create an empty object: container for workouts
+
+    for (const row of res.rows) {
+      // loop through every SQL row in an array
+      const workoutId = row.workout_id;
+
+      if (!workoutsMap[workoutId]) {
+        // if there isn't already a value at this key
+        workoutsMap[workoutId] = {
+          id: row.workout_id,
+          name: row.workout_name,
+          label: row.workout_label,
+          exercises: [], // this is empty because the moment we create the workout object, we are just setiing up the container
+        };
+      }
+
+      if (row.exercise_id !== null) {
+        // check whether the current row actually has an exercise
+        workoutsMap[workoutId].exercises.push({
+          // point at []: add a new item at the end of the array
+          id: row.exercise_id,
+          name: row.exercise_name,
+        });
+      }
+    }
+
+    return NextResponse.json(Object.values(workoutsMap)); // Object.values takes the just the values of object and puts them into array
   } catch (error) {
     console.error("Failed to fetch workout", error);
 

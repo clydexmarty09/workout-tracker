@@ -11,6 +11,7 @@ type Workout = {
     id: number; 
     name: string; 
     label: string | null; 
+    exercises: Exercise[]; 
 }
 
 export default function DashBoard() {
@@ -58,7 +59,8 @@ export default function DashBoard() {
            
 
             if(!res.ok) {
-                setError(data.error || "Failed to fetch workouts"); 
+                setError(data.error || "Failed to fetch workouts");
+                return;  
             }
             
             setWorkouts(data); 
@@ -87,6 +89,8 @@ export default function DashBoard() {
                 console.error(data.error || "Failed to save workout")
                 return null; 
             }
+
+            await fetchWorkouts();  // get the newest workouts from the server after POST success 
 
             //success : close the form and clear inputs 
             setShowAddWorkout(false); 
@@ -220,11 +224,12 @@ export default function DashBoard() {
                                     { loading ?  (<p> Loading... </p>) : 
                                     workouts.length === 0 ? 
                                     (<p> No workouts yet</p>) : 
-                                    ( workouts.map((w:any) => (
+                                    ( workouts.map((w) => (
                                         <div key={w.id}>
                                             <h2> {w.name} </h2>
+                                            <p> {w.label} </p>
                                             
-                                            {w.exercises?.map((ex:any)=> (
+                                            {w.exercises?.map((ex)=> (
                                                 <p key={ex.id}> - {ex.name}</p>
                                             ))}
                                       

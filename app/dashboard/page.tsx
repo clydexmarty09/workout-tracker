@@ -22,38 +22,50 @@ export default function DashBoard() {
     const [exerciseResults, setExerciseResults] = useState<Exercise[]>([]);  // stores the matches the come back from API route
     const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([])  // stores the exercises the user picked for workout
     const [workouts, setWorkouts] = useState<Workout[]>([]); 
-    const [loading, setLoading] = useState(false); 
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");  
 
     // Frontend -> API -> DB -> API -> frontend 
     async function handleExerciseSearch() {
+        
+        setError(""); 
         try {
             // make a request to URL and encode it to prevent broken URLS 
             const res = await fetch(`/api/exercises?search=${encodeURIComponent(exerciseSearch)}`); 
 
             const data = await res.json(); 
             if(!res.ok) {
-                console.error(data.error || "Search failed"); 
-                return; 
+                //console.error(data.error || "Search failed"); 
+                setError(data.error || "Search failed"); 
             }
 
             setExerciseResults(data)
         
         } catch (error) {
-            console.error("Search failed.", error); 
+            setError("Search failed"); 
         }
     }
 
     // displays the workouts saved. 
     async function fetchWorkouts() {
+        setLoading(true); 
+        setError(""); 
         try {
 
             const res = await fetch("/api/workouts"); 
             const data = await res.json();
+
+            if(!res.ok) {
+                setError(data.error || "Failed to fetch workouts"); 
+            }
             
             setWorkouts(data); 
 
         } catch (error) {
-            console.error("Failed to fetch workouts", error)
+            //console.error("Failed to fetch workouts", error)
+            setError("Failed to fetch workouts"); 
+        } finally {
+            setLoading(false); 
         }
     }
     async function handleSaveWorkout() {
@@ -202,12 +214,14 @@ export default function DashBoard() {
                                     >
                                         Show Workouts
                                     </button>
-
-                                    {workouts.map((w:any) => (
+                                    { loading ?  (<p> Loading... </p>) : 
+                                    workouts.length === 0 ? 
+                                    (<p> No workouts yet</p>) : 
+                                    ( workouts.map((w:any) => (
                                         <div key={w.id}>
                                             <h2> {w.name} </h2>
                                         </div> 
-                                    ))}
+                                    )))}
                                 </div>
                            
                             </div> 

@@ -212,35 +212,36 @@ export default function DashBoard() {
                                 onClick={handleSaveWorkout}
                                 > Save Workout 
                                 </button>
-
-                                <div>
-                                    <button
-                                    type="button"
-                                    onClick={fetchWorkouts}
-                                    >
-                                        Show Workouts
-                                    </button>
-                                   
-                                    { loading ?  (<p> Loading... </p>) : 
-                                    workouts.length === 0 ? 
-                                    (<p> No workouts yet</p>) : 
-                                    ( workouts.map((w) => (
-                                        <div key={w.id}>
-                                            <h2> {w.name} </h2>
-                                            <p> {w.label} </p>
-                                            
-                                            {w.exercises?.map((ex)=> (
-                                                <p key={ex.id}> - {ex.name}</p>
-                                            ))}
-                                      
-                                        </div> 
-                                    )))}
-                               
-                                </div>
+ 
                            
                             </div> 
                         </div>
                     )}
+
+                      <div>
+                        <button
+                        type="button"
+                        onClick={fetchWorkouts}
+                        >
+                            Show Workouts
+                        </button>
+                        
+                        { loading ?  (<p> Loading... </p>) : 
+                        workouts.length === 0 ? 
+                        (<p> No workouts yet</p>) : 
+                        ( workouts.map((w) => (
+                            <div key={w.id}>
+                                <h2> {w.name} </h2>
+                                <p> {w.label} </p>
+                                
+                                {w.exercises?.map((ex)=> (
+                                    <p key={ex.id}> - {ex.name}</p>
+                                ))}
+                            
+                            </div> 
+                        )))}
+                    
+                    </div>
                 </div>
             </main>
         </div>

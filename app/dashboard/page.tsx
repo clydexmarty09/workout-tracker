@@ -24,7 +24,8 @@ export default function DashBoard() {
     const [selectedExercises, setSelectedExercises] = useState<Exercise[]>([])  // stores the exercises the user picked for workout
     const [workouts, setWorkouts] = useState<Workout[]>([]); 
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");  
+    const [error, setError] = useState(""); 
+    const [hasFetched, setHasFetched] = useState(false);  
 
     // Frontend -> API -> DB -> API -> frontend 
     async function handleExerciseSearch() {
@@ -64,6 +65,7 @@ export default function DashBoard() {
             }
             
             setWorkouts(data); 
+            setHasFetched(true); 
 
         } catch (error) {
             //console.error("Failed to fetch workouts", error)
@@ -73,7 +75,7 @@ export default function DashBoard() {
         }
     }
 
-    async function handleDeleteWorkout(id: string) {
+    async function handleDeleteWorkout(id: any) {
 
         setError(""); 
 
@@ -248,12 +250,14 @@ export default function DashBoard() {
                         </button>
                         
                         { loading ?  (<p> Loading... </p>) : 
+                       !hasFetched ? null : 
                         workouts.length === 0 ? 
-                        (<p> No workouts yet</p>) : 
+                        (<p> No workouts yet </p>)  : 
                         ( workouts.map((w) => (
                             <div key={w.id}>
                                 <h2> {w.name} </h2>
                                 <p> {w.label} </p>
+                                <button type="button" onClick={()=>{handleDeleteWorkout(w.id)}}>  DELETE WORKOUT</button>
                                 
                                 {w.exercises?.map((ex)=> (
                                     <p key={ex.id}> - {ex.name}</p>

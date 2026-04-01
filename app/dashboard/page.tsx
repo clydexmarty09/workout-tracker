@@ -72,6 +72,26 @@ export default function DashBoard() {
             setLoading(false); 
         }
     }
+
+    async function handleDeleteWorkout(id: string) {
+
+        setError(""); 
+
+        try {   
+            const res = await fetch(`/api/workouts/${id}`, 
+                { method: "DELETE", }
+            ); 
+
+            if (!res.ok) {
+                throw new Error("Cannot delete data"); 
+            }
+
+            await fetchWorkouts(); 
+
+        } catch {
+            setError("Cannot delete data")
+        }
+    }   
     async function handleSaveWorkout() {
         try {   
             const res = await fetch("/api/workouts", {
@@ -124,6 +144,7 @@ export default function DashBoard() {
          prev.filter((exercise) => exercise.id !== id)  // only keep the exercises whose id does not match the one we want to remove 
      ); 
     }
+
 
     return(
         <div> 

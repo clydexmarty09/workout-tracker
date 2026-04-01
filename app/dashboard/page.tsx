@@ -32,6 +32,42 @@ export default function DashBoard() {
     const [editWorkoutName, setEditWorkoutName] = useState(""); 
     const [editWorkoutLabel, setEditWorkoutLabel] = useState(""); 
 
+    // for adding an exercise to a workout
+    const [addExerciseId, setAddExerciseId] = useState<number | null>(null); 
+
+    async function deleteExercise(id: number, exerciseId: number) {
+        try {
+            setError(""); 
+            const response = await fetch(
+                `/api/workouts/${id}/exercises/${exerciseId}`, 
+                {
+                    method: "DELETE", 
+                }
+            ); 
+
+            const data = await response.json(); 
+            if (!response.ok) {
+                setError(data.error || "Failed to remove exercise"); 
+                return; 
+            }
+
+            setWorkouts((prev) =>
+                prev.map((workout) => 
+                    workout.id === Number(id)
+                    ? { 
+                        ... workout, 
+                        exercises: workout.exercises.filter(
+                            (exercise) => exercise.id !== Number(exerciseId)
+                        )
+                     }
+                     : workout 
+                )
+            ); 
+        } catch (error) {
+            console.error(error); 
+            setError("Something went wrong"); 
+        }
+    }
     async function handleEditWorkout(id: number) {
         setError(""); 
 
@@ -346,8 +382,28 @@ export default function DashBoard() {
                       DELETE WORKOUT
                     </button>
 
+                    <button
+                    type="button"
+                    onClick={()=> setAddExerciseId(w.id)}
+                    > Add Exercise </button>
+
+                    {addExerciseId === w.id ? (
+                        <div> 
+                            <p> UI goes here</p>
+                            <button
+                            type="button"
+                            onClick={()=> setAddExerciseId(null)}
+                            > 
+                            Cancel
+                            </button>
+                        </div> 
+                    ): null }
+                    
                     {w.exercises?.map((ex) => (
+                    <div key={ex.id}> 
                       <p key={ex.id}>- {ex.name}</p>
+                      <button type="button" onClick={()=> deleteExercise(w.id, ex.id)}> DELETE</button>
+                    </div> 
                     ))}
                   </div>
                 )}

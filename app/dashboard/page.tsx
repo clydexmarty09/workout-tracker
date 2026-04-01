@@ -27,6 +27,43 @@ export default function DashBoard() {
     const [error, setError] = useState(""); 
     const [hasFetched, setHasFetched] = useState(false);  
 
+    // for updating the workout
+    const [editingWorkoutId, setEditingWorkoutId] = useState<number | null>(null); 
+    const [editWorkoutName, setEditWorkoutName] = useState(""); 
+    const [editWorkoutLabel, setEditWorkoutLabel] = useState(""); 
+
+    async function handleEditWorkout(id: number) {
+        setError(""); 
+
+        try {
+
+            const res = await fetch(`/api/workouts/${id}`, 
+            {
+                method: "PATCH", 
+                headers: {
+                    "Content-Type": "application/json", 
+                }, 
+                body: JSON.stringify({
+                    name: editWorkoutName, label: editWorkoutLabel
+                }),
+            }); 
+
+            const data = await res.json(); 
+
+            if(!res.ok) {
+                setError(data.error || "Failed to update"); 
+                return; 
+            }
+
+            setEditWorkoutLabel(""); 
+            setWorkoutName(""); 
+            setEditingWorkoutId(null); 
+            await fetchWorkouts(); 
+
+        } catch {
+            setError("Update failed")
+        }
+    }
     // Frontend -> API -> DB -> API -> frontend 
     async function handleExerciseSearch() {
         
@@ -75,7 +112,7 @@ export default function DashBoard() {
         }
     }
 
-    async function handleDeleteWorkout(id: any) {
+    async function handleDeleteWorkout(id: number) {
 
         setError(""); 
 
@@ -147,128 +184,178 @@ export default function DashBoard() {
      ); 
     }
 
+    return (
+  <div>
+    <main>
+      <div>
+        {/* Add workout section */}
+        {!showAddWorkout ? (
+          <button onClick={() => setShowAddWorkout(true)}>Add Workout</button>
+        ) : (
+          <div>
+            <h2>Create workout</h2>
 
-    return(
-        <div> 
-            <main> 
-                <div> {/* {condition} ? (if condition is true, do this) : (else, do this) */}
-                    {!showAddWorkout ? ( 
-                        <button onClick={()=>setShowAddWorkout(true)}> Add Workout </button>
-                    ) : (
-                        <div> 
-                            <h2> Create workout </h2>
-                            
-                            <input
-                            value={workoutName}
-                            type="text"
-                            placeholder="Workout Name"
-                            onChange={(e)=> setWorkoutName(e.target.value)}
-                            />
+            <input
+              value={workoutName}
+              type="text"
+              placeholder="Workout Name"
+              onChange={(e) => setWorkoutName(e.target.value)}
+            />
 
-                            <input
-                             value={workoutLabel}
-                             type="text"
-                             placeholder="Label (optional)"
-                             onChange={(e)=> setWorkoutLabel(e.target.value)}
-                             />
+            <input
+              value={workoutLabel}
+              type="text"
+              placeholder="Label (optional)"
+              onChange={(e) => setWorkoutLabel(e.target.value)}
+            />
 
+            <div>
+              <input
+                value={exerciseSearch}
+                type="text"
+                placeholder="Search Exercise"
+                onChange={(e) => setExerciseSearch(e.target.value)}
+              />
 
-                             <div> {/* Search area */ }
-                                <input
-                                value={exerciseSearch}
-                                type="text"
-                                placeholder="Search Exercise"
-                                onChange={(e)=> setExerciseSearch(e.target.value)}
-                                />
+              <button type="button" onClick={handleExerciseSearch}>
+                Search
+              </button>
+            </div>
 
-                                <button type="button" onClick={handleExerciseSearch}> Search </button>
-                            </div>
-                            
-                            <div>  {/* Results area */ }
-                                <h3> Search Results </h3>
-                                {exerciseResults.map((exercise)=> (
-                                    <div key={exercise.id}> 
-                                        
-                                        <p> {exercise.name} </p>
-                                        <button
-                                        type="button"
-                                        onClick={()=> handleAddExercise(exercise)}
-                                        > 
-                                        Add
-                                        </button>
-                                    </div> 
-                                ))}
-                            </div> 
-
-                            <div> {/* show selected exercises */}
-                                <h3> Selected Exercises </h3>
-                                {selectedExercises.map((exercise)=> (
-                                    <div key={exercise.id}> 
-                                        <p> {exercise.name} </p>
-
-                                        <button
-                                        onClick={()=> handleRemove(exercise.id)}
-                                        type="button"
-                                        > 
-                                        Remove
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                             
-                             <div> 
-                                
-                                <button
-                                onClick = {()=>{
-                                    setShowAddWorkout(false); 
-                                    setWorkoutName(""); 
-                                    setWorkoutLabel(""); 
-                                    setExerciseSearch(""); 
-                                    setExerciseResults([]); 
-                                    setSelectedExercises([]); 
-                                }}
-                                > Cancel 
-                                </button>
-
-                                <button
-                                type="button"
-                                onClick={handleSaveWorkout}
-                                > Save Workout 
-                                </button>
- 
-                           
-                            </div> 
-                        </div>
-                    )}
-
-                      <div>
-                        <button
-                        type="button"
-                        onClick={fetchWorkouts}
-                        >
-                            Show Workouts
-                        </button>
-                        
-                        { loading ?  (<p> Loading... </p>) : 
-                       !hasFetched ? null : 
-                        workouts.length === 0 ? 
-                        (<p> No workouts yet </p>)  : 
-                        ( workouts.map((w) => (
-                            <div key={w.id}>
-                                <h2> {w.name} </h2>
-                                <p> {w.label} </p>
-                                <button type="button" onClick={()=>{handleDeleteWorkout(w.id)}}>  DELETE WORKOUT</button>
-                                
-                                {w.exercises?.map((ex)=> (
-                                    <p key={ex.id}> - {ex.name}</p>
-                                ))}
-                            
-                            </div> 
-                        )))}
-                    
-                    </div>
+            <div>
+              <h3>Search Results</h3>
+              {exerciseResults.map((exercise) => (
+                <div key={exercise.id}>
+                  <p>{exercise.name}</p>
+                  <button
+                    type="button"
+                    onClick={() => handleAddExercise(exercise)}
+                  >
+                    Add
+                  </button>
                 </div>
-            </main>
+              ))}
+            </div>
+
+            <div>
+              <h3>Selected Exercises</h3>
+              {selectedExercises.map((exercise) => (
+                <div key={exercise.id}>
+                  <p>{exercise.name}</p>
+
+                  <button
+                    onClick={() => handleRemove(exercise.id)}
+                    type="button"
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            <div>
+              <button
+                onClick={() => {
+                  setShowAddWorkout(false);
+                  setWorkoutName("");
+                  setWorkoutLabel("");
+                  setExerciseSearch("");
+                  setExerciseResults([]);
+                  setSelectedExercises([]);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button type="button" onClick={handleSaveWorkout}>
+                Save Workout
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Show workouts section */}
+        <div>
+          <button type="button" onClick={fetchWorkouts}>
+            Show Workouts
+          </button>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : !hasFetched ? null : workouts.length === 0 ? (
+            <p>No workouts yet</p>
+          ) : (
+            workouts.map((w) => (
+              <div key={w.id}>
+                {editingWorkoutId === w.id ? (
+                  <div>
+                    <input
+                      value={editWorkoutName}
+                      onChange={(e) => setEditWorkoutName(e.target.value)}
+                      type="text"
+                      placeholder="Workout Name"
+                    />
+
+                    <input
+                      value={editWorkoutLabel}
+                      onChange={(e) => setEditWorkoutLabel(e.target.value)}
+                      type="text"
+                      placeholder="Workout Label"
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() => handleEditWorkout(w.id)}
+                    >
+                      Save
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditWorkoutName("");
+                        setEditWorkoutLabel("");
+                        setEditingWorkoutId(null);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <h2>{w.name}</h2>
+                    <p>{w.label}</p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditWorkoutLabel(w.label || "");
+                        setEditWorkoutName(w.name);
+                        setEditingWorkoutId(w.id);
+                      }}
+                    >
+                      EDIT WORKOUT
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleDeleteWorkout(w.id);
+                      }}
+                    >
+                      DELETE WORKOUT
+                    </button>
+
+                    {w.exercises?.map((ex) => (
+                      <p key={ex.id}>- {ex.name}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))
+          )}
         </div>
-    )
-}
+      </div>
+    </main>
+  </div>
+)};

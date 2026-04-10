@@ -223,6 +223,35 @@ export default function DashBoard() {
         }
     }
 
+    async function handleAddExercisesToWorkout(exercise: Exercise, workout: Workout) {
+      try {
+
+        const res = await fetch(`/api/workouts/${workout.id}/exercises`, {
+          method: "POST", 
+          headers: {
+            "Content-Type": "application/json",
+          }, 
+          body: JSON.stringify( { exerciseId: exercise.id}), 
+
+        });
+
+        const data = await res.json(); 
+        if(!res.ok) {
+          setError(data.error || "Cannot add exercise"); 
+          return; 
+        }
+
+        await fetchWorkouts();
+        setExerciseSearch(""); 
+        setExerciseResults([]); 
+        setAddExerciseId(null); 
+         
+
+      } catch {
+        setError("Cannot add exercise"); 
+      }
+    }
+
     function handleAddExercise(exercise: Exercise) {
         
         setSelectedExercises((prev)=> {

@@ -389,7 +389,32 @@ export default function DashBoard() {
 
                     {addExerciseId === w.id ? (
                         <div> 
-                            <p> UI goes here</p>
+                            <div> 
+                                <input
+                                value={exerciseSearch}
+                                placeholder="Search Exercise"
+                                onChange={(e)=> setExerciseSearch(e.target.value)}
+                                type="text"
+                                />
+
+                                <button onClick={handleExerciseSearch}> Search </button>
+                            </div>
+
+                        <div>
+                            <h3>Search Results</h3>
+                            {exerciseResults.map((exercise) => (
+                                <div key={exercise.id}>
+                                <p>{exercise.name}</p>
+                                <button
+                                    type="button"
+                                    onClick={() => handleAddExercise(w.id, exercise)}
+                                >
+                                    Add
+                                </button>
+                                </div>
+                            ))}
+                        </div> 
+                           
                             <button
                             type="button"
                             onClick={()=> setAddExerciseId(null)}
@@ -398,7 +423,7 @@ export default function DashBoard() {
                             </button>
                         </div> 
                     ): null }
-                    
+
                     {w.exercises?.map((ex) => (
                     <div key={ex.id}> 
                       <p key={ex.id}>- {ex.name}</p>

@@ -1,3 +1,4 @@
+// this file takes care of one specific excercise attached to specific workouts
 import { db } from "@/lib/db";
 import { getLoggedInUserId } from "@/lib/auth";
 import { NextResponse } from "next/server";

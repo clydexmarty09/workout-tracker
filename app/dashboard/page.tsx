@@ -33,7 +33,28 @@ export default function DashBoard() {
     const [editWorkoutLabel, setEditWorkoutLabel] = useState(""); 
 
     // for adding an exercise to a workout
-    const [addExerciseId, setAddExerciseId] = useState<number | null>(null); 
+    const [addExerciseId, setAddExerciseId] = useState<number | null>(null);
+    
+    async function handleLogout() {
+      try {
+
+        const response = await fetch(`/api/auth/logout`, 
+          { method: "POST" }
+        ); 
+
+        const data = await response.json(); 
+        if(!response.ok) {
+          setError(data.error || "Logout Failed"); 
+          return; 
+        }
+
+        window.location.href = "/login"; 
+
+      } catch (error) {
+        console.error("Somethign went wrong")
+        setError("Logout Failed")
+      }
+    }
 
     async function deleteExercise(id: number, exerciseId: number) {
         try {
@@ -180,8 +201,9 @@ export default function DashBoard() {
             }); 
 
             const data = await res.json(); 
+            
             if(!res.ok) {
-                console.error(data.error || "Failed to save workout")
+                setError(data.error || "Failed to save workout")
                 return null; 
             }
 
@@ -224,6 +246,8 @@ export default function DashBoard() {
   <div>
     <main>
       <div>
+        
+        <button onClick={handleLogout}> Logout </button>
         {/* Add workout section */}
         {!showAddWorkout ? (
           <button onClick={() => setShowAddWorkout(true)}>Add Workout</button>
@@ -407,7 +431,7 @@ export default function DashBoard() {
                                 <p>{exercise.name}</p>
                                 <button
                                     type="button"
-                                    onClick={() => handleAddExercise(w.id, exercise)}
+                                    onClick={() => handleAddExercise(exercise)}
                                 >
                                     Add
                                 </button>

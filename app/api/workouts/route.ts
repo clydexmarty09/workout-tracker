@@ -1,3 +1,5 @@
+// this file handles all workouts and creating a whole new workout
+
 import { getLoggedInUserId } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";

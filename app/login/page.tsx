@@ -35,9 +35,9 @@ export default function Login() {
     }
 
     return(
-         <div className="overflow-hidden min-h-dvh"> 
-            <main className="w-full p-4 max-w-sm mx-auto"> 
-                <h1 className="text-left font-bold text-2xl"> LOGIN </h1>
+          <div className="landing-outer"> 
+            <main className="landing-inner"> 
+                <h1 className="text-left font-bold text-3xl"> LOGIN </h1>
                 
                 <form onSubmit={handleLogin}> 
                     <div className="flex flex-col gap-2"> 

@@ -36,6 +36,14 @@
   .exercises-card {
     @apply flex gap-2 flex-col text-left border border-amber-50 p-4 rounded-md
   }
+
+  .landing-outer {
+    @apply min-h-dvh bg-black flex items-center justify-center; 
+  }
+
+  .landing-inner {
+    @apply flex flex-col gap-5 mx-auto w-full p-4 max-w-sm; 
+  }
 }
 
 @media (prefers-color-scheme: dark) {

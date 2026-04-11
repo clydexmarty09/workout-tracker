@@ -40,10 +40,11 @@ export default function FrontPage() {
         }
     }
 
+    // this function gets all exercises from the backend and stores them in state 
     async function fetchExercises() {
         try {
 
-            setLoading(true); 
+            setLoading(true);  // because fetching takes time 
             const res = await fetch(`/api/exercises`); 
             const data = await res.json(); 
             
@@ -59,15 +60,35 @@ export default function FrontPage() {
         } catch {
             setError("Cannot fetch exercises"); 
         } finally {
-            setLoading(false); 
+            setLoading(false);  // turn off loadinf after request 
         }
     }
 
+    // this is for creating a temporary workout 
     function addToWorkout(exercise: any) {
-        setSelectedExercises((prev)=> [...prev, exercise])
+        // we use prev because it's the value of the state before any updates 
+         setSelectedExercises((prev)=> {
+            const exists = prev.some((item)=> item.id === exercise.id); 
+ 
+            if(exists) {
+                return prev; 
+            }
+
+            return [...prev, exercise]; 
+         }); 
+    
+    
+    }
+
+    function deleteExercises(id: number) {
+        // filter because we create a new array only passing the given condition 
+        setSelectedExercises((prev)=> 
+            prev.filter((item)=> item.id !== id)
+        ); 
     }
 
     return (
+
         <main> 
             <h1> SOME TEXT HERE </h1>
            
@@ -101,6 +122,7 @@ export default function FrontPage() {
                 { selectedExercises.map((exercise)=> (
                     <div key={exercise.id}> 
                         <p> { exercise.name} </p>
+                        <button type="button" onClick={()=> deleteExercises(exercise.id)}> </button>
                     </div> 
                 ))}
             </div>

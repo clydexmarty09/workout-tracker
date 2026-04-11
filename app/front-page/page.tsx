@@ -13,6 +13,16 @@ export default function FrontPage() {
 
     async function handleAddExercise() {
 
+        // check frontend for duplicates 
+        const duplicate = exercises.some(
+            (item)=> item.name.trim().toLowerCase() === exerciseName.trim().toLowerCase()
+        ); 
+
+        if(duplicate) {
+            setError("Exercise already exists!"); 
+            return; 
+        }
+        
         try {
             const res = await fetch(`/api/exercises`,  // send request to backend route 
                 {

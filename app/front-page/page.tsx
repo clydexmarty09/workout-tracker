@@ -11,6 +11,9 @@ export default function FrontPage() {
 
     // for creating workouts 
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
+    const [workoutName, setWorkoutName] = useState<string>(""); 
+    const [label, setLabel]= useState(""); 
+    const [workouts, setWorkouts] = useState<any[]>([]); 
 
     const router = useRouter(); // for navigation
     async function handleLogout() {
@@ -80,7 +83,56 @@ export default function FrontPage() {
     }
 
     async function handleCreateWorkout() {
+        try {
+            setLoading(true); 
+            setError(""); 
 
+            const res = await fetch(`/api/workouts`, {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({ name: workoutName, label: label, exerciseIds: selectedExercises.map(e=> e.id)} )
+            }); 
+
+            const data = await res.json(); 
+            if(!res.ok) {
+                setError(data.error || "Cannot create workout"); 
+                return; 
+            }
+
+            setWorkoutName(""); 
+            setSelectedExercises([]); 
+
+        } catch (error) {
+            setError("Cannot add workout")
+        } finally { 
+            setLoading(false); 
+        }
+    }
+
+    async function fetchWorkouts() {
+        try {
+
+            setLoading(true); 
+
+            const res = await fetch(`/api/workouts`); 
+            const data = await res.json(); 
+
+            if(!res.ok) {
+                setError("Cannot fetch workouts"); 
+                return; 
+            }
+
+            setWorkouts(data);
+            console.log(data); 
+            setError(""); 
+
+        } catch {
+            setError("Cannot fetch workouts"); 
+        } finally {
+            setLoading(false); 
+        }
     }
 
     // this function gets all exercises from the backend and stores them in state 
@@ -92,7 +144,7 @@ export default function FrontPage() {
             const data = await res.json(); 
             
             if (!res.ok) {
-                setError("Cannot fetch exercises ")
+                setError(data.error || "Cannot fetch exercises ")
                 return; 
             }
 
@@ -156,6 +208,7 @@ export default function FrontPage() {
             </form>
 
             <button className="btn w-full" type="button" onClick={fetchExercises}> Show exercises</button>
+        
             <div className="exercises-card"> 
                 <h2 className="font-semibold text-2xl"> Exercise List </h2>
                
@@ -174,6 +227,8 @@ export default function FrontPage() {
                 
             </div>
 
+            <button className="btn w-full" type="button" onClick={fetchWorkouts}> Show Workouts</button>
+
             <div className="exercises-card"> 
                 <h2 className="font-semibold text-2xl"> Current Workout </h2>
                 { selectedExercises.map((exercise)=> (
@@ -182,8 +237,32 @@ export default function FrontPage() {
                         <button className="btn-3 "type="button" onClick={()=> deleteExercises(exercise.id)}> [Delete] </button>
                     </div> 
                 ))}
+                
+
+                <input
+                value={workoutName}
+                onChange={(e)=> setWorkoutName(e.target.value)}
+                placeholder="Workout Name"
+                type="text"
+                className="border border-amber-50 rounded-md p-2 w-full"
+                /> 
 
                 <button className="btn" type="button" onClick={handleCreateWorkout}> Create Workout </button>
+            </div>
+
+
+            <div className="exercises-card">  
+                <h2 className="text-left text-2xl font-semibold"> Workouts </h2>
+                { workouts.map((w)=> (
+                    <div className="flex text-left flex-col gap-3" key={w.id}> 
+                        <h3> {w.name} </h3>
+                        <p> {w.label} </p>
+
+                        {w.exercises.map((exercise: any)=> (
+                            <div key={exercise.id}> {exercise.name} </div> 
+                        ))}
+                    </div>
+                ))}
             </div>
        
         </div> 

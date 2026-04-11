@@ -43,7 +43,7 @@ export async function POST(request: Request) {
     return NextResponse.json(workout, { status: 201 });
   } catch {
     return NextResponse.json(
-      { error: "Cannot create workouts" },
+      { error: "Cannot create workout" },
       { status: 500 },
     );
   }
@@ -65,14 +65,14 @@ export async function GET() {
         */
     const res = await db.query(
       `SELECT 
-            w.id AS workout_id
-            w.name AS workout_name
-            w.label AS workout_label
-            e.id AS exercise_id
+            w.id AS workout_id,
+            w.name AS workout_name,
+            w.label AS workout_label,
+            e.id AS exercise_id,
             e.name AS exercise_name
             FROM workouts w
             LEFT JOIN workout_exercises we
-                ON w.id = we.workout.id
+                ON w.id = we.workout_id
             LEFT JOIN exercises e
                 ON we.exercise_id = e.id
             WHERE w.user_id = $1

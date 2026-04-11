@@ -49,6 +49,8 @@ export default function FrontPage() {
             setError("Exercise already exists!"); 
             return; 
         }
+
+        setError(""); 
         
         try {
             const res = await fetch(`/api/exercises`,  // send request to backend route 
@@ -151,10 +153,11 @@ export default function FrontPage() {
 
             <button className="btn w-full" type="button" onClick={fetchExercises}> Show exercises</button>
             <div className="exercises-card"> 
+                <h2 className="font-semibold text-2xl"> Exercise List </h2>
                
                  
                 { loading && <p> Loading ... </p>}
-                { error && <p> { error} </p>}
+                { error && <p className="text-red-500"> { error} </p>}
                 { exercises.map((e)=> (
                     <div className="flex gap-3" key={e.id}> 
                         <p className="flex-1"> {e.name} </p>
@@ -167,12 +170,12 @@ export default function FrontPage() {
                 
             </div>
 
-            <div> 
-                <h2> Current Workout </h2>
+            <div className="exercises-card"> 
+                <h2 className="font-semibold text-2xl"> Current Workout </h2>
                 { selectedExercises.map((exercise)=> (
-                    <div key={exercise.id}> 
-                        <p> { exercise.name} </p>
-                        <button type="button" onClick={()=> deleteExercises(exercise.id)}> </button>
+                    <div className="flex gap-3" key={exercise.id}> 
+                        <p className="flex-1"> { exercise.name} </p>
+                        <button className="btn-3 "type="button" onClick={()=> deleteExercises(exercise.id)}> [Delete] </button>
                     </div> 
                 ))}
             </div>

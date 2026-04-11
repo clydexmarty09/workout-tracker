@@ -14,15 +14,15 @@
 
 @layer components {
   .btn {
-    @apply font-semibold text-center bg-blue-400/70 text-sm w-full p-1 border rounded-md border-gray-700;
+    @apply font-semibold text-center bg-blue-400/70 text-sm w-full p-1 border rounded-md border-white/80;
   }
 
   .btn-2 {
-    @apply font-semibold text-center bg-red-400 text-sm w-full p-1 border rounded-md border-gray-700; 
+    @apply font-semibold text-center bg-red-400 text-sm w-full p-1 border rounded-md border-white/80; 
   }
 
   .btn-3 {
-    @apply text-xs font-semibold text-right p-1 border rounded-md border-gray-700; 
+    @apply text-xs font-semibold text-right p-1 border rounded-md border-white/80; 
   }
 
   .input {
@@ -30,11 +30,11 @@
   }
 
   .main-page {
-    @apply text-center p-4 min-h-dvh flex flex-col gap-3 bg-black
+    @apply text-center p-4 min-h-dvh flex flex-col gap-3 bg-black; 
   }
 
   .exercises-card {
-    @apply flex gap-2 flex-col text-left border border-amber-50 p-4 rounded-md
+    @apply flex gap-2 flex-col text-left border border-amber-50 p-4 rounded-md;
   }
 
   .landing-outer {

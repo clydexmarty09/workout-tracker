@@ -79,6 +79,10 @@ export default function FrontPage() {
         }
     }
 
+    async function handleCreateWorkout() {
+
+    }
+
     // this function gets all exercises from the backend and stores them in state 
     async function fetchExercises() {
         try {
@@ -178,6 +182,8 @@ export default function FrontPage() {
                         <button className="btn-3 "type="button" onClick={()=> deleteExercises(exercise.id)}> [Delete] </button>
                     </div> 
                 ))}
+
+                <button className="btn" type="button" onClick={handleCreateWorkout}> Create Workout </button>
             </div>
        
         </div> 

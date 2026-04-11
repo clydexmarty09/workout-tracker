@@ -17,7 +17,7 @@ export async function POST() {
       );
     }
 
-    cookieStore.delete("sessionId");
+    success.cookies.delete("sessionId");
 
     return success;
   } catch {

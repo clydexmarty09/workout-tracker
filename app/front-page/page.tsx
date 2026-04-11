@@ -1,5 +1,6 @@
 "use client"; 
 import { useState } from "react"; 
+import { useRouter } from "next/navigation"; 
 
 export default function FrontPage() {
 
@@ -11,6 +12,32 @@ export default function FrontPage() {
     // for creating workouts 
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
 
+    const router = useRouter(); // for navigation
+    async function handleLogout() {
+        try {
+
+            setError(""); 
+            setLoading(true); 
+
+            const res = await fetch(`/api/auth/logout`, 
+                {
+                    method: "POST"
+                }
+            ); 
+
+            if (!res.ok) {
+                setError("Log out failed")
+                return; 
+            }
+
+            router.push('/login'); 
+
+        } catch {
+            setError("Unauthorized"); 
+        } finally {
+            setLoading(false); 
+        }
+    }
     async function handleAddExercise() {
 
         // check frontend for duplicates 
@@ -100,8 +127,8 @@ export default function FrontPage() {
     return (
 
         <main> 
-            <h1> SOME TEXT HERE </h1>
-           
+            <button type="button" onClick={handleLogout}> EXIT </button>
+            <h1> DASHBOARD </h1>
             <form> 
                 <input 
                 value={exerciseName}

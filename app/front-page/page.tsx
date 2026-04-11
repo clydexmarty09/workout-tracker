@@ -124,33 +124,46 @@ export default function FrontPage() {
         ); 
     }
 
+    function closeExercises() {
+        setExercises([]); 
+    }
+
     return (
 
-        <main> 
-            <button type="button" onClick={handleLogout}> EXIT </button>
-            <h1> DASHBOARD </h1>
-            <form> 
-                <input 
+        <main className="bg-black"> 
+             <button className="underline text-blue-300 text-left font-semibold p-3" type="button" onClick={handleLogout}> EXIT </button>
+    
+        <div className="main-page"> 
+            
+            <h1 className="text-left text-2xl font-bold"> Add an exercise </h1>
+            
+            <form className="flex flex-col gap-5"> 
+                <input
+                className="border border-amber-50 rounded-md p-1 w-full" 
                 value={exerciseName}
                 onChange={(e) => setExerciseName(e.target.value)}
-                placeholder="Insert exercises name"
+                placeholder="Insert exercise name"
                 type="text"
                 />
 
-                <button type="button" onClick={handleAddExercise}> Add Exercises </button> 
+                <button className="btn w-full" type="button" onClick={handleAddExercise}> Add Exercises </button> 
             </form>
 
-            <div> 
-                <button type="button" onClick={fetchExercises}> Show exercises</button>
+            <button className="btn w-full" type="button" onClick={fetchExercises}> Show exercises</button>
+            <div className="exercises-card"> 
                
+                 
                 { loading && <p> Loading ... </p>}
                 { error && <p> { error} </p>}
                 { exercises.map((e)=> (
-                    <div key={e.id}> 
-                        <p> {e.name} </p>
-                        <button type="button" onClick={()=>  addToWorkout(e)}> Add to workout </button>
+                    <div className="flex gap-3" key={e.id}> 
+                        <p className="flex-1"> {e.name} </p>
+                        <button className="btn-3" type="button" onClick={()=>  addToWorkout(e)}> [Add] </button>
                     </div> 
                 ))}
+
+             
+                {/* <button className="btn-2 w-55" onClick={closeExercises}> Close </button> */}
                 
             </div>
 
@@ -163,6 +176,9 @@ export default function FrontPage() {
                     </div> 
                 ))}
             </div>
+       
+        </div> 
+       
         </main>
     )
 }

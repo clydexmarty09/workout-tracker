@@ -271,6 +271,14 @@ export default function FrontPage() {
                 className="border border-amber-50 rounded-md p-2 w-full"
                 /> 
 
+                <input
+                value={label}
+                onChange={(e)=> setLabel(e.target.value)}
+                placeholder="Workout Label (optional)"
+                type="text"
+                className="border border-amber-50 rounded-md p-2 w-full"
+                />
+
                 <button className="btn" type="button" onClick={handleCreateWorkout}> Create Workout </button>
             </div>
 

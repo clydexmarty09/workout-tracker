@@ -175,6 +175,30 @@ export default function FrontPage() {
     
     }
 
+    async function handleDeleteWorkout(id: string) {
+        try {
+
+            setLoading(true); 
+
+            const res = await fetch(`/api/workouts/${id}`, {
+                method: "DELETE"
+            }); 
+
+            if(!res.ok) {
+                setError("Failed to delete workout")
+                console.log(error); 
+            }
+
+            setError(""); 
+            await fetchWorkouts(); 
+
+        } catch {
+            setError("Failed to delete workout")
+        } finally {
+            setLoading(false); 
+        }
+    }
+
     function deleteExercises(id: number) {
         // filter because we create a new array only passing the given condition 
         setSelectedExercises((prev)=> 
@@ -257,6 +281,7 @@ export default function FrontPage() {
                     <div className="flex text-left flex-col gap-3" key={w.id}> 
                         <h3> {w.name} </h3>
                         <p> {w.label} </p>
+                        <button onClick={()=> handleDeleteWorkout(w.id)}type="button" className="btn-3"> Delete </button> 
 
                         {w.exercises.map((exercise: any)=> (
                             <div key={exercise.id}> {exercise.name} </div> 

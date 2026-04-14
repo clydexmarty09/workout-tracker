@@ -78,3 +78,28 @@ export async function POST(request: Request) {
     );
   }
 }
+
+export async function GET(request: Request) {
+  try {
+    const userId = await getLoggedInUserId();
+
+    if (!userId) {
+      return NextResponse.json({ error: "Unaauthenticated" }, { status: 401 });
+    }
+
+    const res = await db.query(
+      `
+      SELECT *
+      FROM workout_sessions
+      WHERE user_id = $1`,
+      [userId],
+    );
+
+    return NextResponse.json(res.rows, { status: 200 });
+  } catch {
+    return NextResponse.json(
+      { error: "Cannot fetch workout sessions" },
+      { status: 500 },
+    );
+  }
+}

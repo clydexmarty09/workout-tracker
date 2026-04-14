@@ -37,36 +37,38 @@ export async function POST(request: Request) {
     }
 
     // create the actual session
-    const sessionRes = await db.query(
+    const res = await db.query(
       `INSERT INTO workout_sessions (user_id, workout_id)
             VALUES($1, $2)
             RETURNING *`,
       [userId, workoutId],
     );
 
+    return NextResponse.json(res.rows[0]);
+
     // session.id
-    const session = sessionRes.rows[0];
+    // const session = sessionRes.rows[0];
 
-    // find all exercises that belong to the original workout template
-    const exerciseRes = await db.query(
-      `SELECT exercise_id
-        FROM workout_exercises
-        WHERE workout_id = $1`,
-      [workoutId],
-    );
+    // // find all exercises that belong to the original workout template
+    // const exerciseRes = await db.query(
+    //   `SELECT exercise_id
+    //     FROM workout_exercises
+    //     WHERE workout_id = $1`,
+    //   [workoutId],
+    // );
 
-    // start a loop over every exercises row returned by the previosu query
-    // create one matching session_exercise row for each workout exercise
-    // copy the exercises
-    for (const exercise of exerciseRes.rows) {
-      await db.query(
-        `INSERT INTO session_exercises (session_id, exercises_id )
-            VALUES ($1, $2)`,
-        [session.id, exercise.exercise_id],
-      );
-    }
+    // // start a loop over every exercises row returned by the previosu query
+    // // create one matching session_exercise row for each workout exercise
+    // // copy the exercises
+    // for (const exercise of exerciseRes.rows) {
+    //   await db.query(
+    //     `INSERT INTO session_exercises (session_id, exercises_id )
+    //         VALUES ($1, $2)`,
+    //     [session.id, exercise.exercise_id],
+    //   );
+    // }
 
-    return NextResponse.json(session, { status: 201 });
+    // return NextResponse.json(session, { status: 201 });
 
     //return NextResponse.json(res.rows[0], { status: 201 });
   } catch {

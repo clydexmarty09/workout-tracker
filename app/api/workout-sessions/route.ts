@@ -44,7 +44,7 @@ export async function POST(request: Request) {
       [userId, workoutId],
     );
 
-    return NextResponse.json(res.rows[0]);
+    return NextResponse.json(res.rows[0], { status: 201 });
 
     // session.id
     // const session = sessionRes.rows[0];

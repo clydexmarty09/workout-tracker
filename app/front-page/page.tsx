@@ -13,7 +13,59 @@ export default function FrontPage() {
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
     const [workoutName, setWorkoutName] = useState<string>(""); 
     const [label, setLabel]= useState(""); 
-    const [workouts, setWorkouts] = useState<any[]>([]); 
+    const [workouts, setWorkouts] = useState<any[]>([]);
+    
+    // for creating a session
+    const [session, setSession] = useState<any | null>(null); 
+
+    async function handleAddSession(workoutId: number) {
+        try {
+            setLoading(true); 
+            const res = await fetch(`/api/workout-sessions`, {
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json"
+                }, 
+                body: JSON.stringify({ workoutId })
+            }); 
+
+            const data = await res.json(); 
+           
+            if(!res.ok) {
+                setError("Cannot create session") ; 
+                return;  
+            }
+
+            console.log(data); 
+            setError(""); 
+            setSession(data); 
+
+        } catch {
+            setError("Cannot create session"); 
+        } finally {
+            setLoading(false); 
+        }
+    }
+
+    // async function fetchsessions() {
+    //     try {
+    //         setLoading(true); 
+    //         const res = await fetch(`/api/workout-sessions`); 
+    //         const data = await res.json(); 
+
+    //         if(!res.ok) {
+    //             setError("Cannot fetch sessions")
+    //         }
+
+    //         setError(""); 
+    //         setSession(data); 
+
+    //     } catch {
+    //         setError("Cannot fetch sessions"); 
+    //     } finally {
+    //         setLoading(false); 
+    //     }
+    // }
 
     const router = useRouter(); // for navigation
     async function handleLogout() {
@@ -289,7 +341,8 @@ export default function FrontPage() {
                     <div className="flex text-left flex-col gap-3" key={w.id}> 
                         <h3> {w.name} </h3>
                         <p> {w.label} </p>
-                        <button onClick={()=> handleDeleteWorkout(w.id)}type="button" className="btn-3"> Delete </button> 
+                        <button className="btn-3" onClick={()=> handleAddSession(w.id)}> Start Workout </button>
+                        <button onClick={()=> handleDeleteWorkout(w.id)}type="button" className="btn-2"> Delete </button> 
 
                         {w.exercises.map((exercise: any)=> (
                             <div key={exercise.id}> {exercise.name} </div> 
@@ -297,6 +350,21 @@ export default function FrontPage() {
                     </div>
                 ))}
             </div>
+
+            <div className="exercises-card">
+
+                { !session ?  (<p> No sessions yet </p>) : (
+
+                    <div> 
+                        <h3> Active Session: </h3>
+                        <p> Wokout ID: {session.workout_id}  </p>
+                        <p> Started at: {session.created_at} </p>
+
+                    </div>
+                
+                )}
+            </div>
+                    
        
         </div> 
        

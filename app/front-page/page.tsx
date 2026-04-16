@@ -265,12 +265,8 @@ export default function FrontPage() {
     return (
 
         <main className="bg-black">
-            {/* <div className="flex justify-between p-3"> 
-                <h1 className="font-semibold text-2xl"> WORKOUT TRACKER </h1>
-                <button className="underline text-blue-300 text-right font-semibold p-3" type="button" onClick={handleLogout}> EXIT </button>
-            </div>  */}
 
-            <header className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+            <header className="header">
                 <div className="flex items-center justify-between px-4 py-4">
                     <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-zinc-400">Dashboard</p>
@@ -286,6 +282,32 @@ export default function FrontPage() {
                     </button>
                 </div>
             </header>
+
+            <section className="px-4 py-4"> 
+
+                <div className="summary-card"> 
+                    <p className="text-sm font-medium opacity-80"> Welcome back </p>
+                    <h2 className="mt-1 text-2xl font-bold"> Ready to train? </h2>
+                    
+                    <div className="mt-4 grid grid-cols-3 gap-3 text-center"> 
+                        <div> 
+                            <p> {exercises.length} </p>
+                            <p> Exercises </p>
+                        </div> 
+                            
+                        <div> 
+                            <p> {workouts.length} </p>
+                            <p> Workouts </p>
+
+                        </div>
+                           
+                        <div> 
+                            <p> {session ? "1" : "0"} </p>
+                            <p> Active </p>
+                        </div> 
+                    </div> 
+                </div> 
+            </section>
     
         <div className="main-page"> 
             

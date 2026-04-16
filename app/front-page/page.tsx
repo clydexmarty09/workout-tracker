@@ -264,8 +264,28 @@ export default function FrontPage() {
 
     return (
 
-        <main className="bg-black"> 
-             <button className="underline text-blue-300 text-left font-semibold p-3" type="button" onClick={handleLogout}> EXIT </button>
+        <main className="bg-black">
+            {/* <div className="flex justify-between p-3"> 
+                <h1 className="font-semibold text-2xl"> WORKOUT TRACKER </h1>
+                <button className="underline text-blue-300 text-right font-semibold p-3" type="button" onClick={handleLogout}> EXIT </button>
+            </div>  */}
+
+            <header className="sticky top-0 z-10 border-b border-zinc-800 bg-zinc-950/90 backdrop-blur">
+                <div className="flex items-center justify-between px-4 py-4">
+                    <div>
+                    <p className="text-xs uppercase tracking-[0.2em] text-zinc-400">Dashboard</p>
+                    <h1 className="text-xl font-bold">Workout Tracker</h1>
+                    </div>
+
+                    <button
+                    type="button"
+                    onClick={handleLogout}
+                    className="rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300"
+                    >
+                    Exit
+                    </button>
+                </div>
+            </header>
     
         <div className="main-page"> 
             

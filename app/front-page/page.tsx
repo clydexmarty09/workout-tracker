@@ -290,18 +290,18 @@ export default function FrontPage() {
                     <h2 className="mt-1 text-2xl font-bold"> Ready to train? </h2>
                     
                     <div className="mt-4 grid grid-cols-3 gap-3 text-center"> 
-                        <div> 
+                        <div className="welcome-section-cols"> 
                             <p> {exercises.length} </p>
                             <p> Exercises </p>
                         </div> 
                             
-                        <div> 
+                        <div className="welcome-section-cols"> 
                             <p> {workouts.length} </p>
                             <p> Workouts </p>
 
                         </div>
                            
-                        <div> 
+                        <div className="welcome-section-cols"> 
                             <p> {session ? "1" : "0"} </p>
                             <p> Active </p>
                         </div> 

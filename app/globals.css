@@ -22,6 +22,10 @@
     @apply rounded-3xl bg-gradient-to-br from-lime-400 to-green-500 p-5 text-black; 
   }
 
+  .welcome-section-cols {
+    @apply rounded-2xl bg-black/10 p-3; 
+  }
+
   .btn {
     @apply font-semibold text-center bg-blue-400/70 text-sm w-full px-4 py-2.5 border rounded-xl active:scale-95 border-white/20;
   }

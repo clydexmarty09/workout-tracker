@@ -16,7 +16,10 @@ export default function FrontPage() {
     const [workouts, setWorkouts] = useState<any[]>([]);
     
     // for creating a session
-    const [session, setSession] = useState<any | null>(null); 
+    const [session, setSession] = useState<any | null>(null);
+    
+    // for tabbing the other sections of the site 
+    const [showAddExercise, setShowAddExercise] = useState(false); 
 
     async function handleAddSession(workoutId: number) {
         try {
@@ -224,7 +227,6 @@ export default function FrontPage() {
             return [...prev, exercise]; 
          }); 
     
-    
     }
 
     async function handleDeleteWorkout(id: string) {
@@ -264,7 +266,7 @@ export default function FrontPage() {
 
     return (
 
-        <main className="bg-black">
+        <main className="bg-black min-h-dvh mx-auto max-w-md">
 
             <header className="header">
                 <div className="flex items-center justify-between px-4 py-4">
@@ -308,76 +310,83 @@ export default function FrontPage() {
                     </div> 
                 </div> 
             </section>
-    
-        <div className="main-page"> 
-            
-            <h1 className="text-left text-2xl font-bold"> Add an exercise </h1>
-            
-            <form className="flex flex-col gap-5"> 
-                <input
-                className="border border-amber-50 rounded-md p-1 w-full" 
-                value={exerciseName}
-                onChange={(e) => setExerciseName(e.target.value)}
-                placeholder="Insert exercise name"
-                type="text"
-                />
-
-                <button className="btn w-full" type="button" onClick={handleAddExercise}> Add Exercises </button> 
-            </form>
-
-            <button className="btn w-full" type="button" onClick={fetchExercises}> Show exercises</button>
         
-            <div className="exercises-card"> 
-                <h2 className="font-semibold text-2xl"> Exercise List </h2>
-               
-                 
-                { loading && <p> Loading ... </p>}
-                { error && <p className="text-red-500"> { error} </p>}
-                { exercises.map((e)=> (
-                    <div className="flex gap-3" key={e.id}> 
-                        <p className="flex-1"> {e.name} </p>
-                        <button className="btn-3" type="button" onClick={()=>  addToWorkout(e)}> [Add] </button>
-                    </div> 
-                ))}
-
-             
-                {/* <button className="btn-2 w-55" onClick={closeExercises}> Close </button> */}
+        <section className="p-4">
+            <div className="add-exercise-card"> 
                 
-            </div>
-
-            <button className="btn w-full" type="button" onClick={fetchWorkouts}> Show Workouts</button>
-
-            <div className="exercises-card"> 
-                <h2 className="font-semibold text-2xl"> Current Workout </h2>
-                { selectedExercises.map((exercise)=> (
-                    <div className="flex gap-3" key={exercise.id}> 
-                        <p className="flex-1"> { exercise.name} </p>
-                        <button className="btn-3 "type="button" onClick={()=> deleteExercises(exercise.id)}> [Delete] </button>
-                    </div> 
-                ))}
+                <h1 className="text-left text-2xl font-bold"> Add an exercise </h1>
                 
+                <form className="flex flex-col gap-5"> 
+                    <input
+                    className="border border-amber-50 rounded-md p-1 w-full" 
+                    value={exerciseName}
+                    onChange={(e) => setExerciseName(e.target.value)}
+                    placeholder="Insert exercise name"
+                    type="text"
+                    />
 
-                <input
-                value={workoutName}
-                onChange={(e)=> setWorkoutName(e.target.value)}
-                placeholder="Workout Name"
-                type="text"
-                className="border border-amber-50 rounded-md p-2 w-full"
-                /> 
+                    <button className="btn" type="button" onClick={handleAddExercise}> Add Exercises </button> 
+                </form>
 
-                <input
-                value={label}
-                onChange={(e)=> setLabel(e.target.value)}
-                placeholder="Workout Label (optional)"
-                type="text"
-                className="border border-amber-50 rounded-md p-2 w-full"
-                />
+                <button className="btn" type="button" onClick={fetchExercises}> Show exercises</button>
 
-                <button className="btn" type="button" onClick={handleCreateWorkout}> Create Workout </button>
-            </div>
+                </div> 
+            </section>
+        
+            <section className="add-exercise-card">
+                <div> 
+                    <h2 className="font-semibold text-2xl"> Exercise List </h2>
+                
+                    
+                    { loading && <p> Loading ... </p>}
+                    { error && <p className="text-red-500"> { error} </p>}
+                    { exercises.map((e)=> (
+                        <div className="flex gap-3" key={e.id}> 
+                            <p className="flex-1"> {e.name} </p>
+                            <button className="btn-3" type="button" onClick={()=>  addToWorkout(e)}> [Add] </button>
+                        </div> 
+                    ))}
+
+                
+                    {/* <button className="btn-2 w-55" onClick={closeExercises}> Close </button> */}
+                    
+                </div>
+
+                <button className="btn w-full" type="button" onClick={fetchWorkouts}> Show Workouts</button>
+
+                <div className="exercises-card"> 
+                    <h2 className="font-semibold text-2xl"> Current Workout </h2>
+                    { selectedExercises.map((exercise)=> (
+                        <div className="flex gap-3" key={exercise.id}> 
+                            <p className="flex-1"> { exercise.name} </p>
+                            <button className="btn-3 "type="button" onClick={()=> deleteExercises(exercise.id)}> [Delete] </button>
+                        </div> 
+                    ))}
+                    
+
+                    <input
+                    value={workoutName}
+                    onChange={(e)=> setWorkoutName(e.target.value)}
+                    placeholder="Workout Name"
+                    type="text"
+                    className="border border-amber-50 rounded-md p-2 w-full"
+                    /> 
+
+                    <input
+                    value={label}
+                    onChange={(e)=> setLabel(e.target.value)}
+                    placeholder="Workout Label (optional)"
+                    type="text"
+                    className="border border-amber-50 rounded-md p-2 w-full"
+                    />
+
+                    <button className="btn" type="button" onClick={handleCreateWorkout}> Create Workout </button>
+                </div>
+
+            </section>
 
 
-            <div className="exercises-card">  
+            <div className="add-exercise-card">  
                 <h2 className="text-left text-2xl font-semibold"> Workouts </h2>
                 { workouts.map((w)=> (
                     <div className="flex text-left flex-col gap-3" key={w.id}> 
@@ -406,9 +415,6 @@ export default function FrontPage() {
                 
                 )}
             </div>
-                    
-       
-        </div> 
        
         </main>
     )

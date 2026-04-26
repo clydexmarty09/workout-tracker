@@ -27,7 +27,7 @@
   }
 
   .btn {
-    @apply font-semibold text-center bg-blue-400/70 text-sm w-full px-4 py-2.5 border rounded-xl active:scale-95 border-white/20;
+    @apply transition w-full font-semibold text-center bg-blue-400/70 text-sm hover:scale-105 px-4 py-2.5 border rounded-xl active:scale-95 border-white/20;
   }
 
   .btn-2 {
@@ -43,12 +43,17 @@
   }
 
   .main-page {
-    @apply text-center p-4 min-h-dvh flex flex-col gap-3 bg-black mx-auto max-w-md; 
+    @apply text-center p-4 min-h-dvh flex flex-col gap-4 bg-black mx-auto max-w-md; 
+  }
+
+  .add-exercise-card {
+    @apply flex flex-col gap-3 border rounded-md border-white/10 p-4; 
   }
 
   .exercises-card {
     @apply flex gap-3 flex-col text-left border border-white/10 p-4 rounded-xl;
   }
+
 
   .landing-outer {
     @apply min-h-dvh bg-black flex items-center justify-center; 

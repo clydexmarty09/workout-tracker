@@ -9,10 +9,9 @@ export default function FrontPage() {
 
     const [exerciseCount, setExerciseCount] = useState(0); 
     const [workoutCount, setWorkoutCount] = useState(0); 
-     
-    // for creating a session
-    const [session, setSession] = useState<any | null>(null);
-    
+    const [sessionCount, setSessionCount] = useState(0); 
+    const [activeSession, setActiveSession] = useState<any | null>(null); 
+       
     // for tabbing the other sections of the site 
     
     // const [showExercises, setShowExercise] = useState(false);
@@ -22,44 +21,22 @@ export default function FrontPage() {
         async function fetchData() {
             const exerciseRes = await fetch("../api/exercises");   // get response object 
             const workoutRes = await fetch("../api/workouts"); 
+            const sessionRes = await fetch("../api/workout-sessions"); 
 
             const exercises = await exerciseRes.json();  // convert response object into readable JS 
             const workouts = await workoutRes.json(); 
+            const sessions = await sessionRes.json(); 
 
             setExerciseCount(exercises.length); 
             setWorkoutCount(workouts.length); 
+            setSessionCount(sessions.length); 
+
+            setActiveSession(sessions[0]); 
         }
 
         fetchData(); 
     }, [])
-    async function handleAddSession(workoutId: number) {
-        try {
-            setLoading(true); 
-            const res = await fetch(`/api/workout-sessions`, {
-                method: "POST", 
-                headers: {
-                    "Content-Type": "application/json"
-                }, 
-                body: JSON.stringify({ workoutId })
-            }); 
-
-            const data = await res.json(); 
-           
-            if(!res.ok) {
-                setError("Cannot create session") ; 
-                return;  
-            }
-
-            console.log(data); 
-            setError(""); 
-            setSession(data); 
-
-        } catch {
-            setError("Cannot create session"); 
-        } finally {
-            setLoading(false); 
-        }
-    }
+   
 
     // async function fetchsessions() {
     //     try {
@@ -174,7 +151,7 @@ export default function FrontPage() {
                         </div>
                            
                         <div className="welcome-section-cols"> 
-                            <p> {session ? "1" : "0"} </p>
+                            <p> {sessionCount ? "1" : "0"} </p>
                             <p> Active </p>
                         </div> 
                     </div> 
@@ -276,21 +253,21 @@ export default function FrontPage() {
                         ))}
                     </div>
                 ))}
-            </div>
+            </div> */}
 
-            <div className="exercises-card">
+            <div className="items-left flex flex-col p-4 gap-3 border rounded-md border-white/10">
 
-                { !session ?  (<p> No sessions yet </p>) : (
+                { !sessionCount ?  (<p> No sessions yet </p>) : (
 
                     <div> 
-                        <h3> Active Session: </h3>
-                        <p> Wokout ID: {session.workout_id}  </p>
-                        <p> Started at: {session.created_at} </p>
+                        <h3 className="font-semibold"> Active Session: </h3>
+                        <p> Wokout ID: {activeSession?.workout_id}  </p>
+                        <p> Started at: {activeSession?.created_at} </p>
 
                     </div>
                 
                 )}
-            </div> */}
+            </div>
 
             </div>
        

@@ -10,7 +10,9 @@ export default function Exercises() {
     const [workoutName, setWorkoutName] = useState<string>(""); 
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
     const [label, setLabel]= useState(""); 
-    
+    // for creating a session
+    const [session, setSession] = useState<any | null>(null);
+
     async function handleDeleteWorkout(id: string) {
         try {
 
@@ -34,6 +36,35 @@ export default function Exercises() {
             setLoading(false); 
         }
     }
+
+    async function handleAddSession(workoutId: number) {
+            try {
+                setLoading(true); 
+                const res = await fetch(`/api/workout-sessions`, {
+                    method: "POST", 
+                    headers: {
+                        "Content-Type": "application/json"
+                    }, 
+                    body: JSON.stringify({ workoutId })
+                }); 
+    
+                const data = await res.json(); 
+               
+                if(!res.ok) {
+                    setError("Cannot create session") ; 
+                    return;  
+                }
+    
+                console.log(data); 
+                setError(""); 
+                setSession(data); 
+    
+            } catch {
+                setError("Cannot create session"); 
+            } finally {
+                setLoading(false); 
+            }
+        }
 
     async function handleCreateWorkout() {
         try {

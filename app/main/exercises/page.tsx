@@ -98,8 +98,6 @@ export default function Exercises() {
 
                 <h2 className="underline text-left text-lg font-semibold"> { showAddExercise ? "Hide" : "Add Exercise+"} </h2>
                 
-            
-
                 </button>
 
                 

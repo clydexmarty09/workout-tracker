@@ -4,24 +4,16 @@ import { useRouter } from "next/navigation";
 
 export default function FrontPage() {
 
-    const [exerciseName, setExerciseName] = useState(""); 
     const [error, setError] = useState(""); 
     const [loading, setLoading] = useState(false); 
-    const [exercises, setExercises] = useState<any[]> ([]); 
-
-    // for creating workouts 
-    const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
-    const [workoutName, setWorkoutName] = useState<string>(""); 
-    const [label, setLabel]= useState(""); 
-    const [workouts, setWorkouts] = useState<any[]>([]);
-    
+     
     // for creating a session
     const [session, setSession] = useState<any | null>(null);
     
     // for tabbing the other sections of the site 
-    const [showAddExercise, setShowAddExercise] = useState(false); 
-    const [showExercises, setShowExercise] = useState(false);
-    const [showWorkouts, setShowWorkouts] = useState(false); 
+    
+    // const [showExercises, setShowExercise] = useState(false);
+    // const [showWorkouts, setShowWorkouts] = useState(false); 
 
     async function handleAddSession(workoutId: number) {
         try {
@@ -98,173 +90,30 @@ export default function FrontPage() {
             setLoading(false); 
         }
     }
-    async function handleAddExercise() {
-
-        // check frontend for duplicates 
-        const duplicate = exercises.some(
-            (item)=> item.name.trim().toLowerCase() === exerciseName.trim().toLowerCase()
-        ); 
-
-        if(duplicate) {
-            setError("Exercise already exists!"); 
-            return; 
-        }
-
-        setError(""); 
-        
-        try {
-            const res = await fetch(`/api/exercises`,  // send request to backend route 
-                {
-                    method: "POST", 
-                    headers: {
-                        "Content-Type": "application/json"  // format of the request body 
-                    }, 
-                    body : JSON.stringify({ name: exerciseName })  // take JS object and convert to a JSON string 
-                }, 
-            );
-
-            const data = await res.json(); // reads JSON data the backend sent back 
-            
-            if(!res.ok) {
-                setError(data.error || "Cannot add exercise"); 
-                return; 
-            }
-
-            setExerciseName(""); 
-            setError(""); 
-            await fetchExercises(); 
-
-        } catch (error) {
-            setError("Cannot add exercise"); 
-        }
-    }
-
-    async function handleCreateWorkout() {
-        try {
-            setLoading(true); 
-            setError(""); 
-
-            const res = await fetch(`/api/workouts`, {
-                method: "POST", 
-                headers: {
-                    "Content-Type": "application/json"
-                }, 
-                body: JSON.stringify({ name: workoutName, label: label, exerciseIds: selectedExercises.map(e=> e.id)} )
-            }); 
-
-            const data = await res.json(); 
-            if(!res.ok) {
-                setError(data.error || "Cannot create workout"); 
-                return; 
-            }
-
-            setWorkoutName(""); 
-            setSelectedExercises([]); 
-
-        } catch (error) {
-            setError("Cannot add workout")
-        } finally { 
-            setLoading(false); 
-        }
-    }
-
-    async function fetchWorkouts() {
-        try {
-
-            setLoading(true); 
-
-            const res = await fetch(`/api/workouts`); 
-            const data = await res.json(); 
-
-            if(!res.ok) {
-                setError("Cannot fetch workouts"); 
-                return; 
-            }
-
-            setWorkouts(data);
-            console.log(data); 
-            setError(""); 
-
-        } catch {
-            setError("Cannot fetch workouts"); 
-        } finally {
-            setLoading(false); 
-        }
-    }
+   
 
     // this function gets all exercises from the backend and stores them in state 
-    async function fetchExercises() {
-        try {
-
-            setLoading(true);  // because fetching takes time 
-            const res = await fetch(`/api/exercises`); 
-            const data = await res.json(); 
-            
-            if (!res.ok) {
-                setError(data.error || "Cannot fetch exercises ")
-                return; 
-            }
-
-            setExercises(data); 
-            console.log(data); 
-            setError(""); 
-       
-        } catch {
-            setError("Cannot fetch exercises"); 
-        } finally {
-            setLoading(false);  // turn off loadinf after request 
-        }
-    }
-
     // this is for creating a temporary workout 
-    function addToWorkout(exercise: any) {
-        // we use prev because it's the value of the state before any updates 
-         setSelectedExercises((prev)=> {
-            const exists = prev.some((item)=> item.id === exercise.id); 
+    // function addToWorkout(exercise: any) {
+    //     // we use prev because it's the value of the state before any updates 
+    //      setSelectedExercises((prev)=> {
+    //         const exists = prev.some((item)=> item.id === exercise.id); 
  
-            if(exists) {
-                return prev; 
-            }
+    //         if(exists) {
+    //             return prev; 
+    //         }
 
-            return [...prev, exercise]; 
-         }); 
+    //         return [...prev, exercise]; 
+    //      }); 
     
-    }
+    // }
 
-    async function handleDeleteWorkout(id: string) {
-        try {
-
-            setLoading(true); 
-
-            const res = await fetch(`/api/workouts/${id}`, {
-                method: "DELETE"
-            }); 
-
-            if(!res.ok) {
-                setError("Failed to delete workout")
-                console.log(error); 
-            }
-
-            setError(""); 
-            await fetchWorkouts(); 
-
-        } catch {
-            setError("Failed to delete workout")
-        } finally {
-            setLoading(false); 
-        }
-    }
-
-    function deleteExercises(id: number) {
-        // filter because we create a new array only passing the given condition 
-        setSelectedExercises((prev)=> 
-            prev.filter((item)=> item.id !== id)
-        ); 
-    }
-
-    function closeExercises() {
-        setExercises([]); 
-    }
+    // function deleteExercises(id: number) {
+    //     // filter because we create a new array only passing the given condition 
+    //     setSelectedExercises((prev)=> 
+    //         prev.filter((item)=> item.id !== id)
+    //     ); 
+    // }
 
     return (
 
@@ -289,7 +138,7 @@ export default function FrontPage() {
                 </div>
             </header>
 
-            <section className="px-4 py-4"> 
+            {/* <section className="px-4 py-4"> 
 
                 <div className="summary-card"> 
                     <p className="text-sm font-medium opacity-80"> Welcome back </p>
@@ -313,46 +162,8 @@ export default function FrontPage() {
                         </div> 
                     </div> 
                 </div> 
-            </section>
-        
-        <section className="p-3">
-         
-           
-            <div className="card">
-
-             <button
-            onClick={()=> setShowAddExercise(prev => !prev)}
-            
-            > 
-
-       
-            <h2 className="underline text-left text-lg font-semibold"> { showAddExercise ? "Hide" : "Add Exercise+"} </h2>
-               
-        
-
-            </button>
-
-            
-                { showAddExercise && 
-
-                    <form className="flex flex-col gap-5"> 
-                        <h3 className="text-md"> Add an exercise:  </h3>
-                        <input
-                        className="border border-amber-50 rounded-md p-1 w-full" 
-                        value={exerciseName}
-                        onChange={(e) => setExerciseName(e.target.value)}
-                        placeholder="Insert exercise name"
-                        type="text"
-                        />
-
-                        <button className="btn" type="button" onClick={handleAddExercise}> Add Exercises </button> 
-                        
-                    </form>
-                    
-                }
-            
-                </div> 
-            </section>
+            </section> */}
+    
         
             <section className="p-3">
                 <div className="card"> 

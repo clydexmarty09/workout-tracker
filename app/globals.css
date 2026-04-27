@@ -46,14 +46,9 @@
     @apply text-center p-4 min-h-dvh flex flex-col gap-4 bg-black mx-auto max-w-md; 
   }
 
-  .add-exercise-card {
-    @apply flex flex-col gap-3 border rounded-md border-white/10 p-4; 
+  .card {
+    @apply border border-white/10 bg-white/5 p-4 shadow-sm; 
   }
-
-  .exercises-card {
-    @apply flex gap-3 flex-col text-left border border-white/10 p-4 rounded-xl;
-  }
-
 
   .landing-outer {
     @apply min-h-dvh bg-black flex items-center justify-center; 

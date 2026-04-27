@@ -1,11 +1,14 @@
 "use client"; 
-import { useState } from "react"; 
+import { useState, useEffect } from "react"; 
 import { useRouter } from "next/navigation"; 
 
 export default function FrontPage() {
 
     const [error, setError] = useState(""); 
     const [loading, setLoading] = useState(false); 
+
+    const [exerciseCount, setExerciseCount] = useState(0); 
+    const [workoutCount, setWorkoutCount] = useState(0); 
      
     // for creating a session
     const [session, setSession] = useState<any | null>(null);
@@ -15,6 +18,20 @@ export default function FrontPage() {
     // const [showExercises, setShowExercise] = useState(false);
     // const [showWorkouts, setShowWorkouts] = useState(false); 
 
+    useEffect(()=> {
+        async function fetchData() {
+            const exerciseRes = await fetch("../api/exercises");   // get response object 
+            const workoutRes = await fetch("../api/workouts"); 
+
+            const exercises = await exerciseRes.json();  // convert response object into readable JS 
+            const workouts = await workoutRes.json(); 
+
+            setExerciseCount(exercises.length); 
+            setWorkoutCount(workouts.length); 
+        }
+
+        fetchData(); 
+    }, [])
     async function handleAddSession(workoutId: number) {
         try {
             setLoading(true); 
@@ -138,7 +155,7 @@ export default function FrontPage() {
                 </div>
             </header>
 
-            {/* <section className="px-4 py-4"> 
+            <section className="px-4 py-4"> 
 
                 <div className="summary-card"> 
                     <p className="text-sm font-medium opacity-80"> Welcome back </p>
@@ -146,12 +163,12 @@ export default function FrontPage() {
                     
                     <div className="mt-4 grid grid-cols-3 gap-3 text-center"> 
                         <div className="welcome-section-cols"> 
-                            <p> {exercises.length} </p>
+                            <p> {exerciseCount} </p>
                             <p> Exercises </p>
                         </div> 
                             
                         <div className="welcome-section-cols"> 
-                            <p> {workouts.length} </p>
+                            <p> {workoutCount} </p>
                             <p> Workouts </p>
 
                         </div>
@@ -162,10 +179,10 @@ export default function FrontPage() {
                         </div> 
                     </div> 
                 </div> 
-            </section> */}
+            </section>
     
         
-            <section className="p-3">
+            {/* <section className="p-3">
                 <div className="card"> 
                     <button className="my-2" type="button" onClick={()=> {
                         setShowExercise(prev=>!prev); 
@@ -196,8 +213,8 @@ export default function FrontPage() {
                     
                 </div>
 
-                </section>
-
+                </section> */}
+{/* 
                 <section className="p-3">
 
                    <div className="card">
@@ -242,10 +259,10 @@ export default function FrontPage() {
                     }
 
                     </div>
-            </section>
+            </section> */}
 
 
-            <div className="card">  
+            {/* <div className="card">  
                 <h2 className="text-left text-2xl font-semibold"> Workouts </h2>
                 { workouts.map((w)=> (
                     <div className="flex text-left flex-col gap-3" key={w.id}> 
@@ -273,7 +290,7 @@ export default function FrontPage() {
                     </div>
                 
                 )}
-            </div>
+            </div> */}
 
             </div>
        

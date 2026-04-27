@@ -31,7 +31,7 @@ export default function Login() {
             return; 
         }
 
-        router.push("/front-page"); 
+        router.push("/main/front-page"); 
     }
 
     return(

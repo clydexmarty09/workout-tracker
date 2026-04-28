@@ -7,21 +7,30 @@ export default function BottomNav() {
     const pathname = usePathname();   // store the current path url 
 
     return (
-        <nav> 
-            <div> 
+        <nav className="fixed z-50 bottom-0 left-0 w-full border-t bg-black"> 
+            <div className="flex justify-around items-center max-w-md mx-auto h-16"> 
                 <Link
+                className={`flex flex-col items-center text-xs font-medium transition
+                 ${pathname === "/main/front-page" ? "text-green-500" : "text-gray-400"}   
+                `}
                 href="/main/front-page"
                 > 
                 HOME
                 </Link>
 
                 <Link
+                className={`flex flex-col items-center text-xs font-medium transition
+                 ${pathname === "/main/exercises" ? "text-green-500" : "text-gray-400"}   
+                `}
                 href="/main/exercises"
                 > 
                 EXERCISES
                 </Link>
 
                 <Link
+                className={`flex flex-col items-center text-xs font-medium transition
+                 ${pathname === "/main/workouts" ? "text-green-500" : "text-gray-400"}   
+                `}
                 href="/main/workouts"
                 > 
                 WORKOUTS

@@ -111,9 +111,9 @@ export default function FrontPage() {
 
     return (
 
-        <main className="min-h-dvh bg-black text-white">
+        <main className="bg-black text-white min-h-screen">
 
-            <div className="mx-auto flex max-w-md flex-col gap-4 p-4">
+            <div className="min-h-screen mx-auto flex flex-col max-w-md gap-4 p-4">
 
             <header className="header">
                 <div className="flex items-center justify-between px-4 py-4">
@@ -132,7 +132,7 @@ export default function FrontPage() {
                 </div>
             </header>
 
-            <section className="px-4 py-4"> 
+            <section className="px-2"> 
 
                 <div className="summary-card"> 
                     <p className="text-sm font-medium opacity-80"> Welcome back </p>
@@ -255,20 +255,45 @@ export default function FrontPage() {
                 ))}
             </div> */}
 
-            <div className="items-left flex flex-col p-4 gap-3 border rounded-md border-white/10">
+            <div className="items-left flex flex-col p-4 my-2 gap-3 border rounded-md border-white/10">
 
-                { !sessionCount ?  (<p> No sessions yet </p>) : (
+                { !activeSession ?  (<p className="font-semibold text-left"> No sessions yet </p>) : (
 
                     <div> 
-                        <h3 className="font-semibold"> Active Session: </h3>
-                        <p> Wokout ID: {activeSession?.workout_id}  </p>
-                        <p> Started at: {activeSession?.created_at} </p>
+                        <h3 className="font-bold text-lg my-2"> Active Session: </h3>
+                        <p className="font-semibold text-sm"> Wokout ID: <span className="font-normal"> {activeSession?.workout_id} </span> </p>
+                        <p className="font-semibold text-sm"> Started at: <span className="font-normal"> {activeSession?.created_at} </span> </p>
 
                     </div>
                 
                 )}
             </div>
 
+            <div className="grid grid-cols-2 gap-3 text-sm"> 
+                
+                <div className="rounded-xl bg-black-40 p-3">
+                    <p className="text-zinc-400"> Status</p>
+                    <p className="font-semibold text-green-400"> In progress</p>
+                </div>
+                
+                <div className="rounded-xl bg-black-40 p-3"> 
+                    <p className="text-zinc-400"> Session Id:</p>
+                    <p className="font-semibold text-green-400"> {activeSession.id} </p>
+                </div>
+
+               
+
+            </div>
+             <div className="flex justify-between">
+                    <button type="button" className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
+                        Resume Workout
+                    </button>
+                    
+                    <button type="button" className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
+                        Stop Workout
+                    </button>
+                     
+                </div>
             </div>
        
         </main>

@@ -11,6 +11,8 @@ export default function FrontPage() {
     const [workoutCount, setWorkoutCount] = useState(0); 
     const [sessionCount, setSessionCount] = useState(0); 
     const [activeSession, setActiveSession] = useState<any | null>(null); 
+
+    // console.log(activeSession.id); 
        
     // for tabbing the other sections of the site 
     
@@ -278,7 +280,7 @@ export default function FrontPage() {
                 
                 <div className="rounded-xl bg-black-40 p-3"> 
                     <p className="text-zinc-400"> Session Id:</p>
-                    <p className="font-semibold text-green-400"> {activeSession.id} </p>
+                    <p className="font-semibold text-green-400"> {activeSession?.id} </p>
                 </div>
 
                

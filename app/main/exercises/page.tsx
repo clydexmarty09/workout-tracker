@@ -8,7 +8,7 @@ export default function Exercises() {
 
     const [exerciseName, setExerciseName] = useState(""); 
     const [exercises, setExercises] = useState<any[]> ([]);      
-    const [showAddExercise, setShowAddExercise] = useState(false); 
+   
      
     async function fetchExercises() {
         try {
@@ -82,46 +82,94 @@ export default function Exercises() {
 
     return (
         <main className="min-h-dvh bg-black text-white">
-            <div className="flex flex-col gap-4 py-4 px-2 mx-auto max-w-md items-center">
+            <div className="flex flex-col gap-4 p-4 mx-auto max-w-md pb-28">
 
-                <h1 className="text-center"> It works! </h1>
-                <h3> test</h3>
+            <header className="flex items-center justify-between py-2"> 
+                <div> 
+                    <p className="text-xs uppercase tracking-[0.2em] text-zinc-400"> Library </p>
+                    <h1 className="text-xl font-bold"> Exercises </h1>
+                </div>
 
-            <section className="p-3">
-           
-                <div className="card">
-
-                <button
-                onClick={()=> setShowAddExercise(prev => !prev)}
-                
-                > 
-
-                <h2 className="underline text-left text-lg font-semibold"> { showAddExercise ? "Hide" : "Add Exercise+"} </h2>
-                
+                <button 
+                type="button"
+                onClick={fetchExercises}
+                className="rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 transition hover:border-zinc-500"
+                >
+                    Refresh
                 </button>
+            </header>
 
-                
-                    { showAddExercise && 
+            <section className="rounded-2xl border border-white/10 bg-zinc-950 p-4">
 
-                        <form className="flex flex-col gap-5"> 
-                            <h3 className="text-md"> Add an exercise:  </h3>
-                            <input
-                            className="border border-amber-50 rounded-md p-1 w-full" 
+                    <form className="flex flex-col gap-4"> 
+                        <div>
+                            
+                            <p className="text-sm font-medium text-zinc-300"> Add an exercise</p>
+                            <p className="text-xs mt-1 text-zinc-500"> Save movements you want for future workouts</p>
+                           
+                            
+                        </div> 
+
+                        <input
+                            className="w-full rounded-xl border border-white/10 bg-black px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
                             value={exerciseName}
                             onChange={(e) => setExerciseName(e.target.value)}
                             placeholder="Insert exercise name"
                             type="text"
                             />
 
-                            <button className="btn" type="button" onClick={handleAddExercise}> Add Exercises </button> 
-                            
-                        </form>
-                        
-                    }
-                
-                </div> 
+                            <button className="rounded-xl bg-green-500 py-2 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-95" type="button" onClick={handleAddExercise}> Add Exercises </button> 
+                    </form>
+              
+
             </section>
-            
+
+            { error && (
+                <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300"> { error } </p>
+            )}
+
+            {/* <button onClick={fetchExercises}> Show Exercises </button>
+            */}
+
+            <section className="flex flex-1 flex-col gap-3 border rounded-2xl border-white/10 p-4"> 
+                <div className="flex items-center justify-between"> 
+                    <div>
+                        <p className="text-sm font-semibold "> Exercise List</p>
+                        <p className="text-xs text-zinc-500"> {exercises.length} saved </p>
+                    </div> 
+                  
+                    <button
+                    type="button"
+                    onClick={closeExercises}
+                    className="text-sm text-zinc-400 transition hover:text-white"
+                    >
+                        Clear
+                    </button>
+                </div>
+
+                { loading && (
+                    <p className="text-zinc-400 text-sm "> Loading exercises... </p>
+                )}
+
+                {!loading && exercises.length === 0 && (
+                    <p className="text-zinc-400 text-sm"> No exercises yet</p>
+                )}
+                
+          
+
+            {!loading && exercises.length > 0 && (
+            <div className="flex flex-col gap-2"> 
+                
+                { exercises.map((ex)=> 
+                    <div className="flex items-center justify-between rounded-xl bg-zinc-950 px-3 py-3" key={ex.id}> 
+                        <p className="text-sm font-medium"> {ex.name}</p>
+                        <p className="text-xs text-zinc-500"> #{ex.id} </p>
+                    </div>
+                )}
+
+             </div>
+            )}
+            </section>
             </div> 
         </main>
     )

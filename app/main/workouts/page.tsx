@@ -7,8 +7,10 @@ export default function Workouts() {
     const [loading, setLoading] = useState(false); 
 
     const [workouts, setWorkouts] = useState<any[]>([]);
+    const [exercises, setExercises] = useState<any[]>([]); 
     const [workoutName, setWorkoutName] = useState<string>(""); 
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
+    
     const [label, setLabel]= useState(""); 
     
     // for creating a session
@@ -99,7 +101,44 @@ export default function Workouts() {
         }
     }
 
+    function toggleSelectedExercises(exercise: any) {
+        
+        setSelectedExercises((prev)=> {
+            const exists = prev.some((item)=> item.id === exercise.id); 
 
+            if(exists) {
+                return prev.filter((item)=> item.id !== exercise.id); 
+            }
+
+            return [...prev, exercise]; 
+        }); 
+    }
+
+    async function fetchExercises() {
+        try {
+            setLoading(true); 
+
+            const res = await fetch(`/api/exercises`); 
+            const data = await res.json(); 
+
+            if(!res.ok) {
+                setError(data.error || "Cannot fetch exercises"); 
+            }
+
+            setExercises(data); 
+            setError(""); 
+            console.log(data); 
+
+        } catch {
+            
+            setError("Cannot fetch exercises");
+            
+            return ; 
+
+        } finally {
+            setLoading(false); 
+        }
+    }
     async function fetchWorkouts() {
        
         try {
@@ -165,6 +204,52 @@ export default function Workouts() {
                         type="text"
                         className="border border-white/10 w-full rounded-lg px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
                         />
+
+                        <div className="flex flex-col gap-3"> 
+                            <div className="flex items-center justify-between"> 
+                                <div> 
+                                    <p className="text-sm font-medium"> Choose exercises</p>
+                                    <p className="text-xs text-zinc-500"> {selectedExercises.length} </p>
+                                </div>
+
+                                <button 
+                                type="button"
+                                onClick={fetchExercises}
+                                className="rounded-full border border-zinc-700 px-3 py-1.5 text-sm text-zinc-300 transition hover:border-zinc-500"
+                                >
+                                    Load 
+                                </button>
+                            </div>
+
+                            {exercises.length === 0 && (
+                                <p className="rounded-xl border border-dashed border-white/10 p-4 text-center text-sm text-zinc-500"> Load exercises to choose from your library</p>
+                            )}
+
+                            {exercises.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                    {exercises.map((exercise)=> {
+                                        const selected = selectedExercises.some(
+                                            (item)=> item.id === exercise.id
+                                        ); 
+
+                                        return (
+                                            <button
+                                            key={exercise.id}
+                                            type="button"
+                                            onClick={()=> toggleSelectedExercises(exercise)}
+                                            className = {
+                                                selected 
+                                                ? "rounded-full border border-green-500 bg-green-500 px-3 py-1.5 text-xs font-semibold text-black"
+                                                : "rounded-full border border-white/10 px-3 py-1.5 text-xs text-zinc-300"
+                                            }
+                                            >
+                                                {exercise.name}
+                                            </button>
+                                        ); 
+                                    })}
+                                </div>
+                            )}
+                        </div>
 
                         <button
                         type="button"
@@ -260,15 +345,12 @@ export default function Workouts() {
                                                     Delete
                                                 </button> 
 
-                                            </div>
-                                                
-            
+                                            </div>        
                                         </div> 
                                     )}
-                    
+    
                             </div>
                         )}
-                    
                     </div>
                 </section>
             </div> 

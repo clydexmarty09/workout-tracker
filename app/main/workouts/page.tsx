@@ -176,9 +176,11 @@ export default function Exercises() {
 
                 <section className="flex flex-col border gap-4 rounded-2xl p-4 border-white/10 bg-zinc-950"> 
                     
-                    <div className="flex flex-col gap-2">
-                        <h1 className="text-sm"> Workouts </h1>
-                        <p className="text-xs"> View and edit your workouts </p>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <h1 className="text-sm font-semibold"> Workouts </h1>
+                            <p className="text-xs text-zinc-500"> View and start saved workouts </p>
+                        </div>
                         <p className="text-sm text-zinc-500"> {workouts.length} saved</p>
                     </div>
 
@@ -202,8 +204,8 @@ export default function Exercises() {
                                         <p> Label: <span> {w.label} </span></p>
                                         <p> Created: <span> {w.created_at} </span></p>
 
-                                        {w.map((e)=> 
-                                            <div key={e.id}> {w.e.name} </div>
+                                        {w.exercises.map((e: any)=> 
+                                            <div key={e.id}> {e.name} </div>
                                         )}
                                         
                                         </div> 

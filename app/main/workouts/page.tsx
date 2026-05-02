@@ -1,7 +1,7 @@
 "use client"; 
 import { useState } from "react"; 
 
-export default function Exercises() {
+export default function Workouts() {
 
     const [error, setError] = useState(""); 
     const [loading, setLoading] = useState(false); 
@@ -88,6 +88,9 @@ export default function Exercises() {
 
             setWorkoutName(""); 
             setSelectedExercises([]); 
+            setError(""); 
+
+            await fetchWorkouts(); 
 
         } catch (error) {
             setError("Cannot add workout")
@@ -151,7 +154,7 @@ export default function Exercises() {
                         placeholder="Insert workout name"
                         type="text"
                         required
-                        className="border w-full rounded-lg px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
+                        className="border border-white/10 w-full rounded-lg px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
                         />
 
 
@@ -160,7 +163,7 @@ export default function Exercises() {
                         onChange={(e)=> setLabel(e.target.value)}
                         placeholder="Insert workout label (optional)"
                         type="text"
-                        className="border w-full rounded-lg px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
+                        className="border border-white/10 w-full rounded-lg px-3 py-2 text-sm text-white outline-none placeholder:text-zinc-600 focus:border-green-500" 
                         />
 
                         <button
@@ -187,30 +190,82 @@ export default function Exercises() {
                     <div>
 
                         {loading && (
-                            <p className="text-sm text-zinc-400"> Loading... </p>
+                            <p className="text-sm text-zinc-400"> Loading workouts... </p>
                         )}
 
                         {!loading && workouts.length === 0  &&(
-                            <p className="text-sm text-zinc-400"> No workouts yet. </p>
+                            <div className="rounded-xl border border-dashed border-white/10 p-6 text-center">
+                                <p className="text-sm text-zinc-500"> No workouts yet. </p>
+                            </div>
                         )}
 
                         {!loading && workouts.length > 0 && (
-                            <div className="flex flex-col gap-4">
-                                <div> 
+                            <div className="flex flex-col gap-3">
+                                
                                     {workouts.map((w)=> 
-                                        <div className="flex flex-col gap-4 text-sm" key={w.id}> 
-                                        
-                                        <p> Name: <span> {w.name} </span> </p> 
-                                        <p> Label: <span> {w.label} </span></p>
-                                        <p> Created: <span> {w.created_at} </span></p>
+                                        <div className="flex flex-col gap-3 border border-white/10 bg-black p-3 text-sm" key={w.id}> 
+                                            <div>
+                                                <div className="flex items-start justify-between gap-3">
+                                                    <h3 className="text-sm font-semibold"> {w.name} </h3> 
 
-                                        {w.exercises.map((e: any)=> 
-                                            <div key={e.id}> {e.name} </div>
-                                        )}
-                                        
+                                                    {w.label && (
+                                                         <p className="mt-1 text-xs text-zinc-500"> {w.label} </p>
+                                                    )}
+                                                   
+                                                </div>
+                                                    <p className="text-xs text-zinc-600>"> #{w.id} </p>
+                                             </div>
+
+                                             {w.created_at && (
+                                                <p className="mt-2 text-xs text-zinc-600"> Created at: {w.created_at}</p>
+                                             )}
+
+                                             {w.exercises && w.exercises.length > 0 && (
+                                                    
+                                                    <div className="flex flex-wrap gap-2"> 
+
+                                                        {w.exercises.map((e:any)=> 
+                                                            <span
+                                                            key={e.id}
+                                                            className="rounded-full border-white/10 px-2 text-xs text-zinc-300"
+                                                            >
+                                                                {e.name}
+                                                            </span>
+                                                        )}
+                                                    </div>
+
+                                             )}
+
+                                             {(!w.exercises || w.exercises.length === 0) && (
+                                                <p className="text-xs text-zinc-600"> 
+                                                No exercises attached
+                                                </p>
+                                             )}
+
+                                             <div className="grid grid-cols-2 gap-2 "> 
+                                              
+                                                <button
+                                                type="button"
+                                                onClick={()=> handleAddSession(w.id)}
+                                                className="rounded-xl bg-green-500 py-2 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-95"
+                                                >
+                                                    Start
+                                                </button>
+
+                                                <button
+                                                type="button"
+                                                onClick={()=> handleDeleteWorkout(w.id)}
+                                                className="rounded-xl  bg-red-400 py-2 text-sm font-semibold text-black transition hover:scale-[1.02] active:scale-95"
+                                                >
+                                                    Delete
+                                                </button> 
+
+                                            </div>
+                                                
+            
                                         </div> 
                                     )}
-                                </div> 
+                    
                             </div>
                         )}
                     

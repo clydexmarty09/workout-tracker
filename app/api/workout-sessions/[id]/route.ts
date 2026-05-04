@@ -4,29 +4,31 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const userId = getLoggedInUserId();
+    const userId = await getLoggedInUserId();
     if (!userId) {
       return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
-    const sessionId = params.id;
+    const { id: sessionId } = await params;
 
     // start a databse query to fetch the main workout session
     // needs session_id, workout_id, created_at, workout_name, workout_label
     const sessionRes = await db.query(
       `SELECT 
-                ws.id AS session_id
-                ws.workout_id, 
-                ws.created_at, 
-                w.label AS workout_label
-            FROM workout_sessions ws 
-            JOIN workouts w 
-                ON ws.workout_id = w.id
-            WHERE ws.id = $1
-                AND ws.user_id = $2`,
+            ws.id AS session_id,
+            ws.workout_id, 
+            ws.created_at, 
+            w.label AS workout_label,
+            w.name AS workout_name
+
+        FROM workout_sessions ws 
+        JOIN workouts w 
+            ON ws.workout_id = w.id
+        WHERE ws.id = $1
+        AND ws.user_id = $2`,
       [sessionId, userId],
     );
 
@@ -37,7 +39,7 @@ export async function GET(
     // run a second query to get the exercises attached to the workout template
     const exercisesRes = await db.query(
       `SELECT
-            e.id
+            e.id,
             e.name
             FROM workout_exercises we
             JOIN exercises e

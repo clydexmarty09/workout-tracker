@@ -1,5 +1,6 @@
 "use client"; 
-import { useState } from "react"; 
+import { useState } from "react";
+import { useRouter } from "next/navigation";  
 
 export default function Workouts() {
 
@@ -12,6 +13,8 @@ export default function Workouts() {
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
     
     const [label, setLabel]= useState(""); 
+
+    const router = useRouter(); 
     
     // for creating a session
     const [session, setSession] = useState<any | null>(null);
@@ -61,6 +64,8 @@ export default function Workouts() {
                 console.log(data); 
                 setError(""); 
                 setSession(data); 
+
+                router.push(`/main/session/${data.id}`); 
     
             } catch {
                 setError("Cannot create session"); 

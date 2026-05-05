@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLoggedInUserId } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { requestToBodyStream } from "next/dist/server/body-streams";
 
 export async function POST(
   request: Request,

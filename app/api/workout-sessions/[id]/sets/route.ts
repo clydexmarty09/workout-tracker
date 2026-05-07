@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getLoggedInUserId } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { useParams } from "next/navigation";
 
 export async function POST(
   request: Request,
@@ -37,7 +36,8 @@ export async function POST(
 
     const res = await db.query(
       `INSERT INTO session_sets (session_id, exercise_id, set_number, weight_lbs, reps)
-        VALUES ($1, $2, $3, $4, $5)`,
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING * `,
       [sessionId, exerciseId, setNumber, weightLbs, repNumber],
     );
 
@@ -71,7 +71,7 @@ export async function GET(
     }
 
     const res = await db.query(
-      `SELECT *
+      `SELECT 
         ss.id, 
         ss.session_id, 
         ss.exercise_id, 

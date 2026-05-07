@@ -22,8 +22,55 @@ export default function SessionId() {
     const [error, setError] = useState(''); 
     const [loading, setLoading] = useState(false); 
 
+    const [sets, setSets] = useState<any[]>([]); 
+    const [setInputs, setSetInputs] = useState({})
+    
+
+
     const params = useParams();
     const id = Array.isArray(params.id) ? params.id[0] : params.id;
+
+    // const addSets = async () => {
+        
+    //     try {
+    //         setLoading(true); 
+
+    //         const res = await fetch(`/api/workout-sessions/${id}/sets`,
+    //             {
+    //                 method: "POST", 
+    //                 headers: {
+    //                     "Content-Type" : "application/json"
+    //                 }, body: JSON.stringify() 
+    //             }
+    //         )
+    //     } catch {
+    //         setError("Cannot update sets"); 
+    //     } finally  {
+    //         setLoading(false); 
+    //     }
+    // }
+
+
+    const fetchSets = async () => {
+
+        try {
+            setLoading(true); 
+            const res = await fetch(`/api/workout-sessions/${id}/sets`); 
+            const data = await res.json(); 
+
+            if(!res.ok) {
+                setError(data.error  || "Cannot fetch sets"); 
+                return; 
+            }
+
+            setSets(data); 
+            console.log(data); 
+        } catch {
+            setError("Cannot fetch sets"); 
+        } finally {
+            setLoading(false); 
+        }
+    }
 
     const fetchSession = useCallback(async () => {
         
@@ -53,6 +100,8 @@ export default function SessionId() {
 
     useEffect(()=> {
         if (!id) return;
+
+        fetchSets(); 
         fetchSession(); 
     }, [id, fetchSession])
 
@@ -80,12 +129,23 @@ export default function SessionId() {
                                 {session.exercises?.map((exercise) => (
                                     <div className="rounded-2xl border border-white/10 bg-zinc-950 p-4" key={exercise.id}>
                                         <p className="text-sm font-medium">{exercise.name}</p>
-                                        <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-zinc-400"> 
+                                        {/* <div className="mt-3 grid grid-cols-3 gap-2 text-xs text-zinc-400"> 
                                             <p> Set</p>
                                             <p> Reps </p>
                                             <p> Weight</p>
+                                        </div> */}
+                                           
+                                        
+                                        <div>
+                                        {exerciseSets.map((set)=> 
+                                            <div key={set.id}> 
+                                                <p> {set.set_number} sets </p>
+                                                <p> {set.weight_lbs} lbs </p>
+                                                <p> {set.reps} reps  </p>
+                                            </div>
+                                        )}
                                         </div>
-
+                                    
                                     </div>
                                 ))}
                             </div>

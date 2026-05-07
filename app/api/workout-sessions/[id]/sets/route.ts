@@ -87,6 +87,8 @@ export async function GET(
        ORDER BY e.name ASC, ss.set_number ASC`,
       [sessionId],
     );
+
+    return NextResponse.json(res.rows, { status: 200 });
   } catch {
     return NextResponse.json({ error: "Cannot fetch sets" }, { status: 500 });
   }

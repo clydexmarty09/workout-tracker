@@ -2,6 +2,46 @@ import { db } from "@/lib/db";
 import { getLoggedInUserId } from "@/lib/auth";
 import { NextResponse } from "next/server";
 
+export async function PATCH(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const userId = await getLoggedInUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+    }
+
+    const { id: sessionId } = await params;
+    const body = await request.json();
+    const { status } = body;
+
+    if (status !== "completed" && status !== "cancelled") {
+      return NextResponse.json({ error: "Invalid Status" }, { status: 400 });
+    }
+
+    const res = await db.query(
+      `UPDATE workout_sessions
+    SET status = $1, 
+      completed_at = CASE WHEN $1 = 'completed' THEN NOW() ELSE completed_at END
+    WHERE id = $2
+      AND user_id = $3
+    RETURNING *`,
+      [status, sessionId, userId],
+    );
+
+    if (res.rows.length === 0) {
+      return NextResponse.json({ error: "Session not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(res.rows[0], { status: 200 });
+  } catch {
+    return NextResponse.json(
+      { error: "Cannot update session." },
+      { status: 500 },
+    );
+  }
+}
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> },

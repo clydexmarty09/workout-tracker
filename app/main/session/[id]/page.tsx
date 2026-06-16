@@ -85,7 +85,9 @@ export default function SessionId() {
                 return; 
             }
 
+            setError(""); 
             await fetchSets(); 
+            
 
             setSetInputs((prev)=> ({
                 ...prev, 

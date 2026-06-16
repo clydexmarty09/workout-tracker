@@ -16,7 +16,12 @@ export async function POST(
     const { id: sessionId } = await params;
     const { exerciseId, setNumber, repNumber, weightLbs } = body;
 
-    if (!exerciseId || !setNumber || !repNumber || !weightLbs) {
+    if (
+      !exerciseId ||
+      !setNumber ||
+      repNumber === undefined ||
+      weightLbs === undefined
+    ) {
       return NextResponse.json(
         { error: "Missing set fields" },
         { status: 400 },

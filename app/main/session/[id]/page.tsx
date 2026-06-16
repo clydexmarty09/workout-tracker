@@ -86,6 +86,16 @@ export default function SessionId() {
             }
 
             await fetchSets(); 
+
+            setSetInputs((prev)=> ({
+                ...prev, 
+                [exerciseId]: {
+                   reps: "", 
+                   weightLbs: "", 
+                }, 
+            }))
+            
+
         } catch {
             setError("Cannot update sets"); 
         } finally  {
@@ -225,6 +235,7 @@ export default function SessionId() {
                                                     }))
                                                 }
                                                 placeholder="Weight"
+                                                className="rounded-xl bg-black px-3 py-2 text-sm text-white outline-none"
                                                 />
                                             </div>
                                              <button type="button"

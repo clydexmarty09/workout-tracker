@@ -52,6 +52,8 @@ export default function SessionId() {
     // Example: setInputs[3] stores reps/weight for exercise id 3.
     const [setInputs, setSetInputs] = useState<SetInputs>({})
     
+    const[message, setMessage] = useState(""); 
+  
 
     // Get the session id from the URL.
     // Example: /main/session/12 gives us id = "12".
@@ -60,6 +62,36 @@ export default function SessionId() {
 
     // Save a new set to the backend for this session.
     // This sends the exercise id, set number, reps, and weight.
+
+    const editSetStatus  = async() => {
+
+        setLoading(true); 
+        try {
+
+            const res = await fetch(`/api/workout-sessions/${id}`, {
+                method: "PATCH", 
+                headers: {
+                    "Content-Type" : "application/json", 
+                }, 
+                body: JSON.stringify( { status: "completed"})
+            })
+
+            const data = await res.json(); 
+            if(!res.ok) {
+                setError(data.error || "Cannot update status.");
+            }
+
+            setError(""); 
+            setMessage("Workout Completed!"); 
+            setTimeout(()=> setMessage(""), 4000)
+
+        } catch {
+            setError("Cannot update status.")
+            return; 
+        } finally {
+            setLoading(false); 
+        }
+    }
     const addSets = async (exerciseId: number, setNumber: number) => {
         
         try {
@@ -168,8 +200,7 @@ export default function SessionId() {
         <main className="min-h-dvh bg-black text-white"> 
             <div className="mx-auto flex max-w-md flex-col gap-4 p-4 pb-28"> 
                 {loading && <p className="text-sm text-zinc-400">Loading session...</p>}
-                {error && <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
-
+                
                 {session && (
                     <>
                         <section className="rounded-2xl border border-white/10 bg-zinc-950 p-4"> 
@@ -205,6 +236,8 @@ export default function SessionId() {
                                                         <p>{set.set_number}</p>
                                                         <p>{set.reps}</p>
                                                         <p>{set.weight_lbs} lbs</p>
+
+
                                                     </div>
                                                 ))}
                                             </div>
@@ -223,7 +256,7 @@ export default function SessionId() {
                                                     }))
                                                 }
                                                 placeholder="Reps"
-                                                className="rounded-xl bg-black px-3 py-2 text-sm text-white outline-none"
+                                                className="rounded-md bg-black px-3 py-2 text-sm text-white outline-none"
                                                 />
                                                 <input
                                                 value={setInputs[exercise.id]?.weightLbs || ""}
@@ -246,13 +279,27 @@ export default function SessionId() {
                                              > 
                                                 Add Sets
                                              </button>
+
+ 
+
                                         </div>
                                     );
                                 })}
                             </div>
+
+                            <button 
+                                type="button"
+                                onClick={editSetStatus}
+                                className="w-full mt-2 rounded-xl bg-blue-400 py-2 px-1.5 text-sm font-bold text-black"
+                            >
+                                Mark As Complete
+                                </button>
                         </section>
                  </>
                 )}
+
+                {error && <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-300">{error}</p>}
+                {message && <p className="text-sm text-green-400 p-3"> {message}</p> }
             </div>
         </main>
     )

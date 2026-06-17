@@ -4,14 +4,51 @@ import { useRouter } from "next/navigation";
 
 export default function FrontPage() {
 
-    const [error, setError] = useState(""); 
-    const [loading, setLoading] = useState(false); 
-
     const [exerciseCount, setExerciseCount] = useState(0); 
     const [workoutCount, setWorkoutCount] = useState(0); 
     const [sessionCount, setSessionCount] = useState(0); 
     const [activeSession, setActiveSession] = useState<any | null>(null); 
 
+    const [error, setError] = useState(""); 
+    const [loading, setLoading] = useState(false); 
+
+    const router = useRouter(); 
+
+    const resumeWorkout = ()=> {
+        if(!activeSession) return; 
+        router.push(`/main/session/${activeSession.id}`)
+    }
+    const stopWorkout = async() => {
+
+        setLoading(true); 
+
+        try {
+
+            const res = await fetch(`/api/workout-sessions/${activeSession.id}`, {
+                method: "PATCH", 
+                headers: {
+                    "Content-Type" : "application/json", 
+                }, 
+                body: JSON.stringify( { status: "cancelled"}), 
+            })
+
+            const data = await res.json(); 
+            
+            if(!res.ok) {
+                setError(data.error || "Cannot cancel workout"); 
+                return; 
+            }
+
+            setActiveSession(null); 
+
+        } catch {
+            setError("Cannot stop workout.")
+            return; 
+
+        } finally {
+            setLoading(false); 
+        }
+    }
 
     useEffect(()=> {
         async function fetchData() {
@@ -32,29 +69,6 @@ export default function FrontPage() {
 
         fetchData(); 
     }, [])
-   
-
-    // async function fetchsessions() {
-    //     try {
-    //         setLoading(true); 
-    //         const res = await fetch(`/api/workout-sessions`); 
-    //         const data = await res.json(); 
-
-    //         if(!res.ok) {
-    //             setError("Cannot fetch sessions")
-    //         }
-
-    //         setError(""); 
-    //         setSession(data); 
-
-    //     } catch {
-    //         setError("Cannot fetch sessions"); 
-    //     } finally {
-    //         setLoading(false); 
-    //     }
-    // }
-
-    const router = useRouter(); // for navigation
 
     return (
 
@@ -128,11 +142,15 @@ export default function FrontPage() {
 
             </div>
              <div className="flex justify-between">
-                    <button type="button" className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
+                    <button type="button" 
+                    onClick={resumeWorkout}
+                    className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
                         Resume Workout
                     </button>
                     
-                    <button type="button" className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
+                    <button type="button" 
+                    onClick={stopWorkout}
+                    className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
                         Stop Workout
                     </button>
                      

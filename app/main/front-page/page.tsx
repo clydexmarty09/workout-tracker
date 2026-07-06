@@ -1,5 +1,5 @@
 "use client"; 
-import { useState, useEffect } from "react"; 
+import { useState, useEffect, act } from "react"; 
 import { useRouter } from "next/navigation"; 
 
 export default function FrontPage() {
@@ -20,6 +20,8 @@ export default function FrontPage() {
     }
     const stopWorkout = async() => {
 
+        if(!activeSession) return; 
+        setError(""); 
         setLoading(true); 
 
         try {
@@ -40,6 +42,8 @@ export default function FrontPage() {
             }
 
             setActiveSession(null); 
+            setSessionCount(0); 
+            setError(""); 
 
         } catch {
             setError("Cannot stop workout.")
@@ -105,7 +109,7 @@ export default function FrontPage() {
                         </div>
                            
                         <div className="welcome-section-cols"> 
-                            <p> {sessionCount ? "1" : "0"} </p>
+                            <p> {sessionCount} </p>
                             <p> Active </p>
                         </div> 
                     </div> 

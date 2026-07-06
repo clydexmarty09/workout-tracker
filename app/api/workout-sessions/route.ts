@@ -91,7 +91,9 @@ export async function GET(request: Request) {
       `
       SELECT *
       FROM workout_sessions
-      WHERE user_id = $1`,
+      WHERE user_id = $1
+        AND status = 'in_progress'
+      ORDER BY created_at DESC`,
       [userId],
     );
 

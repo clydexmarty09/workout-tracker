@@ -1,5 +1,5 @@
 "use client"; 
-import { useState, useEffect, act } from "react"; 
+import { useState, useEffect } from "react"; 
 import { useRouter } from "next/navigation"; 
 
 export default function FrontPage() {
@@ -134,7 +134,9 @@ export default function FrontPage() {
                 
                 <div className="rounded-xl bg-black-40 p-3">
                     <p className="text-zinc-400"> Status</p>
-                    <p className="font-semibold text-green-400"> In progress</p>
+                    <p className={activeSession ? "font-semibold text-green-400" : "font-semibold text-zinc-500"}>
+                        {activeSession ? "In Progress" : "No active workout"}
+                    </p>
                 </div>
                 
                 <div className="rounded-xl bg-black-40 p-3"> 
@@ -148,13 +150,15 @@ export default function FrontPage() {
              <div className="flex justify-between">
                     <button type="button" 
                     onClick={resumeWorkout}
-                    className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
+                    disabled={!activeSession}
+                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
                         Resume Workout
                     </button>
                     
                     <button type="button" 
                     onClick={stopWorkout}
-                    className="text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
+                    disabled={!activeSession}
+                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
                         Stop Workout
                     </button>
                      

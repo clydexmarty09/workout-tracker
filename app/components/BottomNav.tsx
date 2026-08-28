@@ -63,9 +63,20 @@ export default function BottomNav() {
                  ${pathname === "/main/workouts" ? "text-green-500" : "text-gray-400"}   
                 `}
                 href="/main/workouts"
-                > 
+                >
+                     
                 WORKOUTS
                 </Link>
+                <Link
+                className={`flex flex-col items-center text-xs font-medium transition
+                 ${pathname === "/main/workouts" ? "text-green-500" : "text-gray-400"}   
+                `}
+                href="/main/workouts"
+                
+               
+                > 
+                 PROGRESS
+                 </Link>
 
                 <button
                     type="button"
@@ -73,7 +84,7 @@ export default function BottomNav() {
                     className={`flex flex-col items-center text-xs font-medium transition ${
                         pathname === "/login" ? "text-green-500" : "text-gray-400"
                     }`}
-                >
+                >   
                     LOGOUT
                 </button>
             </div>

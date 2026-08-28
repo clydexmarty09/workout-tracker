@@ -69,7 +69,7 @@ export default function BottomNav() {
                 </Link>
                 <Link
                 className={`flex flex-col items-center text-xs font-medium transition
-                 ${pathname === "/main/workouts" ? "text-green-500" : "text-gray-400"}   
+                 ${pathname === "/main/progress" ? "text-green-500" : "text-gray-400"}   
                 `}
                 href="/main/workouts"
                 

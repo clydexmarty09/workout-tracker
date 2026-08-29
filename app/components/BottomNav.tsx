@@ -71,7 +71,7 @@ export default function BottomNav() {
                 className={`flex flex-col items-center text-xs font-medium transition
                  ${pathname === "/main/progress" ? "text-green-500" : "text-gray-400"}   
                 `}
-                href="/main/workouts"
+                href="/main/progress"
                 
                
                 > 

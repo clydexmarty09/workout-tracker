@@ -56,21 +56,28 @@ export default function Progress() {
      
         <main className="min-h-dvh">
             
-            <div className="flex flex-col max-w-md mx-auto"> 
+            <div className="flex flex-col gap-4 p-4 max-w-md mx-auto"> 
 
-                {isLoading && (<p> Loading data... </p>) }
-                {error && ( <p> {error}  </p>)}
+                 <h1 className="text-2xl font-bold"> Workout History </h1> 
 
-                <section> 
+                {isLoading && (<p className="text-sm text-zinc-200"> Loading data... </p>) }
+                {error && ( <p className="text-red-400"> {error}  </p>)}
+
+              
+
+                <section className="flex flex-col gap-4"> 
                     {Object.entries(progressBySession).map(([sessionId, sessionSets]) => {
 
                         const firstSet = sessionSets[0]; 
 
                         return (
-                            <div key={sessionId}>
+                            <div className="border bg-zinc-950 border-white/10 rounded-2xl p-4" key={sessionId}>
 
-                                <p> {new Date(firstSet.completed_at).toLocaleDateString()} </p>
-                                <p> {firstSet.workout_name} </p>
+                                <p className="font-semibold text-lg"> {firstSet.workout_name} </p> 
+                                <p> {new Date(firstSet.completed_at).toLocaleDateString("en-PH")}{" "} {new Date(firstSet.completed_at).toLocaleDateString("en-PH", {
+                                    weekday: "long" , 
+                                })} </p>
+
 
                                 <details> 
                                     <summary> View Exercises </summary>
@@ -78,7 +85,7 @@ export default function Progress() {
                                     {sessionSets.map((set)=> (
                                         <div key={set.set_id}>
                                             <p> {set.exercise_name} </p>
-                                            <p> {set.weight_lbs} kg x {set.reps} </p>
+                                            <p> {set.weight_lbs} kg x {set.reps} reps</p>
                                         </div>
                                     ))}
                                 </details>

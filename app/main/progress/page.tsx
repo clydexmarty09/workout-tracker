@@ -84,15 +84,16 @@ export default function Progress() {
 
                                 <details> 
                                     <summary> View Exercises </summary>
-
-                                    {sessionSets.map((set)=> (
-                                        <div key={set.set_id}>
-                                            <h3 className="flex flex-col gap-2">
-                                                <span className="italic text-sm"> {set.exercise_name} </span>
-                                                <span className="text-xs text-zinc-400"> {set.weight_lbs} kg x {set.resp} reps </span>
-                                            </h3>
-                                        </div>
-                                    ))}
+                                    <div className="flex flex-col gap-2 mt-2">
+                                        {sessionSets.map((set)=> (
+                                            <div key={set.set_id}>
+                                                <h3 className="flex items-center gap-2">
+                                                    <span className="italic text-sm"> {set.exercise_name} </span>
+                                                    <span className="text-xs text-zinc-100"> {set.weight_lbs} kg x {set.reps} reps </span>
+                                                </h3>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </details>
                             </div>
                         ); 

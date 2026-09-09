@@ -151,14 +151,14 @@ export default function FrontPage() {
                     <button type="button" 
                     onClick={resumeWorkout}
                     disabled={!activeSession}
-                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
+                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-30 transition hover:scale-105 active:scale-95 rounded-xl bg-green-500 py-2 font-semibold text-black"> 
                         Resume Workout
                     </button>
                     
                     <button type="button" 
                     onClick={stopWorkout}
                     disabled={!activeSession}
-                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-50 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
+                    className="disabled:opacity-40 disabled:hover-scale-100 text-sm w-30 transition hover:scale-105 active:scale-95 rounded-xl bg-red-400 py-2 font-semibold text-black"> 
                         Stop Workout
                     </button>
                      

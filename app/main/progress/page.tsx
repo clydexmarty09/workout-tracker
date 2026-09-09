@@ -64,6 +64,9 @@ export default function Progress() {
                 {error && ( <p className="text-red-400"> {error}  </p>)}
 
               
+                {!isLoading && !error && progress.length === 0 && (
+                    <p className="text-sm text-zinc-400"> No data to display. </p>
+                )}
 
                 <section className="flex flex-col gap-4"> 
                     {Object.entries(progressBySession).map(([sessionId, sessionSets]) => {
@@ -82,7 +85,7 @@ export default function Progress() {
                                 <details> 
                                     <summary> View Exercises </summary>
 
-                                    {!progress ? <p>"No data to display" </p> : sessionSets.map((set)=> (
+                                    {sessionSets.map((set)=> (
                                         <div key={set.set_id}>
                                             <p> {set.exercise_name} </p>
                                             <p> {set.weight_lbs} kg x {set.reps} reps</p>

@@ -56,7 +56,7 @@ export default function Progress() {
      
         <main className="min-h-dvh">
             
-            <div className="flex flex-col gap-4 p-4 max-w-md mx-auto"> 
+            <div className="flex flex-col gap-4 p-4 max-w-md mx-auto pb-28"> 
 
                  <h1 className="text-xl font-bold"> Workout History </h1> 
 
@@ -86,8 +86,8 @@ export default function Progress() {
                                     <summary> View Exercises </summary>
 
                                     {sessionSets.map((set)=> (
-                                        <div key={set.set_id}>
-                                            <p className="text-sm"> {set.exercise_name} </p>
+                                        <div className="flex flex-col gap-3" key={set.set_id}>
+                                            <p className="text-sm italic"> {set.exercise_name} </p>
                                             <p className="text-xs"> {set.weight_lbs} kg x {set.reps} reps  </p>
                                         </div>
                                     ))}

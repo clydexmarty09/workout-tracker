@@ -98,19 +98,19 @@ export default function FrontPage() {
                     
                     <div className="mt-4 grid grid-cols-3 gap-3 text-center"> 
                         <div className="welcome-section-cols"> 
-                            <p> {exerciseCount} </p>
-                            <p> Exercises </p>
+                            <p className="text-sm"> {exerciseCount} </p>
+                            <p className="text-sm"> Exercises </p>
                         </div> 
                             
                         <div className="welcome-section-cols"> 
-                            <p> {workoutCount} </p>
-                            <p> Workouts </p>
+                            <p className="text-sm"> {workoutCount} </p>
+                            <p className="text-sm"> Workouts </p>
 
                         </div>
                            
                         <div className="welcome-section-cols"> 
-                            <p> {sessionCount} </p>
-                            <p> Active </p>
+                            <p className="text-sm"> {sessionCount} </p>
+                            <p className="text-sm"> Active </p>
                         </div> 
                     </div> 
                 </div> 

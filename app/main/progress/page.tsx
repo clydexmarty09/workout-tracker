@@ -82,7 +82,7 @@ export default function Progress() {
                                 <details> 
                                     <summary> View Exercises </summary>
 
-                                    {sessionSets.map((set)=> (
+                                    {!progress ? <p>"No data to display" </p> : sessionSets.map((set)=> (
                                         <div key={set.set_id}>
                                             <p> {set.exercise_name} </p>
                                             <p> {set.weight_lbs} kg x {set.reps} reps</p>

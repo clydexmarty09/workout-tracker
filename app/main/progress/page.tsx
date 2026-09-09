@@ -58,10 +58,10 @@ export default function Progress() {
             
             <div className="flex flex-col gap-4 p-4 max-w-md mx-auto"> 
 
-                 <h1 className="text-2xl font-bold"> Workout History </h1> 
+                 <h1 className="text-xl font-bold"> Workout History </h1> 
 
                 {isLoading && (<p className="text-sm text-zinc-200"> Loading data... </p>) }
-                {error && ( <p className="text-red-400"> {error}  </p>)}
+                {error && ( <p className="text-red-400 text-sm"> {error}  </p>)}
 
               
                 {!isLoading && !error && progress.length === 0 && (
@@ -76,8 +76,8 @@ export default function Progress() {
                         return (
                             <div className="border bg-zinc-950 border-white/10 rounded-2xl p-4" key={sessionId}>
 
-                                <p className="font-semibold text-lg"> {firstSet.workout_name} </p> 
-                                <p> {new Date(firstSet.completed_at).toLocaleDateString("en-PH")}{" "} {new Date(firstSet.completed_at).toLocaleDateString("en-PH", {
+                                <p className="font-semibold text-md"> {firstSet.workout_name} </p> 
+                                <p className="text-sm text-zinc-200"> {new Date(firstSet.completed_at).toLocaleDateString("en-PH")}{" "} {new Date(firstSet.completed_at).toLocaleDateString("en-PH", {
                                     weekday: "long" , 
                                 })} </p>
 
@@ -87,8 +87,8 @@ export default function Progress() {
 
                                     {sessionSets.map((set)=> (
                                         <div key={set.set_id}>
-                                            <p> {set.exercise_name} </p>
-                                            <p> {set.weight_lbs} kg x {set.reps} reps</p>
+                                            <p className="text-sm"> {set.exercise_name} </p>
+                                            <p className="text-xs"> {set.weight_lbs} kg x {set.reps} reps  </p>
                                         </div>
                                     ))}
                                 </details>

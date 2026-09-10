@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 export default function Progress() {
 
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(true); 
     const [error, setError] = useState(""); 
     const [progress, setProgress] = useState<any[]>([])
 

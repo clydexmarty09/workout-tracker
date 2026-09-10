@@ -244,7 +244,7 @@ export default function Workouts() {
                                             onClick={()=> toggleSelectedExercises(exercise)}
                                             className = {
                                                 selected 
-                                                ? "rounded-full border border-green-500 bg-green-500 px-3 py-1.5 text-xs font-semibold text-black"
+                                                ? "rounded-full border border-green-500 bg-green-300 px-3 py-1.5 text-xs font-semibold text-black"
                                                 : "rounded-full border border-white/10 px-3 py-1.5 text-xs text-zinc-300"
                                             }
                                             >

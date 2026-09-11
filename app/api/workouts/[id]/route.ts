@@ -50,7 +50,7 @@ export async function PATCH(
   try {
     const userId = await getLoggedInUserId();
     if (!userId) {
-      return NextResponse.json({ error: "Unautheticated" }, { status: 401 });
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
     const { name, label } = await request.json();

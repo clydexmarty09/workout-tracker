@@ -42,3 +42,38 @@ export async function DELETE(
     );
   }
 }
+
+export async function PATCH(
+  request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  try {
+    const userId = await getLoggedInUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "Unautheticated" }, { status: 401 });
+    }
+
+    const { name, label } = await request.json();
+    const { id } = await context.params;
+
+    const res = await db.query(
+      `UPDATE workouts
+      SET name = $1, label = $2
+      WHERE id = $3
+      AND user_id = $4
+      RETURNING *`,
+      [name, label, id, userId],
+    );
+
+    if (res.rows.length === 0) {
+      return NextResponse.json({ error: "Update failed" }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json(
+      { error: "Cannot update workout" },
+      { status: 404 },
+    );
+  }
+}

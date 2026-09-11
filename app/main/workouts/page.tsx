@@ -11,14 +11,47 @@ export default function Workouts() {
     const [exercises, setExercises] = useState<any[]>([]); 
     const [workoutName, setWorkoutName] = useState<string>(""); 
     const [selectedExercises, setSelectedExercises] = useState<any[]>([]); 
-    
     const [label, setLabel]= useState(""); 
+
+    // for renaming 
+    const [newName, setNewName] = useState<string>(""); 
+    const [newLabel, setNewLabel] = useState<string>(""); 
 
     const router = useRouter(); 
     
     // for creating a session
     const [session, setSession] = useState<any | null>(null);
 
+    const handleRenameWorkout = async (id: string) => {
+
+        try {
+            setLoading(true); 
+            setError(""); 
+
+            const res = await fetch(`/api/workouts/${id}`, {
+                method: "PATCH", 
+                headers : {
+                    "Content-Type" : "application/json"
+                }, 
+                body : JSON.stringify({ name: newName, label: newLabel }) 
+            });
+            
+            const data  = await res.json(); 
+            if (!res.ok) {
+                setError(data.error || "Cannot update workout");
+                return; 
+            }
+
+            await fetchWorkouts(); 
+
+        } catch {
+            setError("Cannot update workout")
+        } finally {
+            setLoading(false); 
+        }
+
+
+    }
     async function handleDeleteWorkout(id: string) {
         try {
 

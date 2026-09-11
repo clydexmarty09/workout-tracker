@@ -204,7 +204,7 @@ export default function Workouts() {
     return (
         <main className="min-h-dvh bg-black text-white">
 
-            <div className="flex flex-col gap-4 pb-28 p-4 mx-auto max-w-md">
+            <div className="flex flex-col gap-4 pb-28 p-4 mx-auto max-w-md ">
                 <header className="flex justify-between p-2 items-center"> 
                     <div> 
                         <p className="text-xs text-zinc-400 uppercase tracking-[0.2em]"> Library </p>
@@ -329,7 +329,9 @@ export default function Workouts() {
                                         <div className="flex flex-col gap-3 border border-white/10 bg-black p-3 text-sm" key={w.id}> 
                                             <div>
                                                 <div className="flex items-start justify-between gap-3">
-                                                    <h3 className="text-sm font-semibold"> {w.name} </h3> 
+                                                    
+                                                  
+                                                    <h3 className="text-sm font-semibold"> {w.name}  </h3>
 
                                                     {w.label && (
                                                          <p className="mt-1 text-xs text-zinc-500"> {w.label} </p>
@@ -338,6 +340,32 @@ export default function Workouts() {
                                                 </div>
                                                     <p className="text-xs text-zinc-600>"> #{w.id} </p>
                                              </div>
+                                             <details> 
+                                                <summary className="text-sm italic"> Edit workout </summary>
+                                                <div className="flex flex-col my-2 gap-2 "> 
+                                                  
+                                                    <input
+                                                    placeholder="Rename workout"
+                                                    className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
+                                                    value={newName}
+                                                    onChange={(e)=> setNewName(e.target.value)}
+                                                    > 
+                                                    </input>
+                                                    <input
+                                                    placeholder="Change label"
+                                                    className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
+                                                    value={newLabel}
+                                                    onChange={(e)=> setNewLabel(e.target.value)}
+                                                    > 
+                                                    </input>
+
+                                                    <button onClick={()=> handleRenameWorkout(w.id)} 
+                                                    className="text-center text-sm border rounded-2xl hover:scale-105 transition py-2 px-1.5 font-semibold text-black bg-green-500 mt-2"
+                                                    > Save Changes 
+                                                    </button>
+                                                    
+                                                </div>
+                                             </details>
 
                                              {w.created_at && (
                                                 <p className="mt-2 text-xs text-zinc-600"> Created at: {w.created_at}</p>

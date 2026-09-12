@@ -40,7 +40,7 @@ export async function POST(
     }
 
     const res = await db.query(
-      `INSERT INTO session_sets (session_id, exercise_id, set_number, weight_lbs, reps)
+      `INSERT INTO session_sets (session_id, exercise_id, set_number, weight_kg, reps)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING * `,
       [sessionId, exerciseId, setNumber, weightLbs, repNumber],
@@ -82,7 +82,7 @@ export async function GET(
         ss.exercise_id, 
         e.name AS exercises_name, 
         ss.set_number, 
-        ss.weight_lbs, 
+        ss.weight_kg, 
         ss.reps, 
         ss.created_at
        FROM session_sets ss

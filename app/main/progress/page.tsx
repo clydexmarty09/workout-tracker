@@ -89,7 +89,7 @@ export default function Progress() {
                                             <div key={set.set_id}>
                                                 <h3 className="flex items-center gap-2">
                                                     <span className="italic text-sm"> {set.exercise_name} </span>
-                                                    <span className="text-sm text-zinc-100"> <span className="font-semibold"> {set.weight_lbs} </span> kg x <span className="font-semibold"> {set.reps} </span> reps </span>
+                                                    <span className="text-sm text-zinc-100"> <span className="font-semibold"> {set.weight_kg} </span> kg x <span className="font-semibold"> {set.reps} </span> reps </span>
                                                 </h3>
                                             </div>
                                         ))}

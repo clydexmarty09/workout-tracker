@@ -14,7 +14,7 @@ type SessionSets = {
     session_id: number; 
     exercise_id: number; 
     set_number: number; 
-    weight_lbs: number; 
+    weight_kg: number; 
     reps: number; 
     created_at: string; 
 }; 
@@ -235,7 +235,7 @@ export default function SessionId() {
                                                     <div className="grid grid-cols-3 gap-2 rounded-xl bg-black px-3 py-2 text-sm" key={set.id}> 
                                                         <p>{set.set_number}</p>
                                                         <p>{set.reps}</p>
-                                                        <p>{set.weight_lbs} lbs</p>
+                                                        <p>{set.weight_kg} kg </p>
 
 
                                                     </div>
@@ -260,6 +260,8 @@ export default function SessionId() {
                                                 />
                                                 <input
                                                 value={setInputs[exercise.id]?.weightLbs || ""}
+                                                type="number"
+                                                step="0.01"
                                                 onChange={(e)=> 
                                                     setSetInputs((prev)=> ({
                                                         ...prev, 

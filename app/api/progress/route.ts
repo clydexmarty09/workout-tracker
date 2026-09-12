@@ -17,7 +17,7 @@ export async function GET() {
             
             ss.id AS set_id, 
             ss.set_number,
-            ss.weight_lbs , 
+            ss.weight_kg, 
             ss.reps, 
             ss.created_at, 
             

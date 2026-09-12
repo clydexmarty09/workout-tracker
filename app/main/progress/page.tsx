@@ -76,20 +76,20 @@ export default function Progress() {
                         return (
                             <div className="border bg-zinc-950 border-white/10 rounded-2xl p-4" key={sessionId}>
 
-                                <p className="font-semibold text-md"> {firstSet.workout_name} </p> 
+                                <p className="font-semibold text-sm mb-2"> {firstSet.workout_name} </p> 
                                 <p className="text-sm text-zinc-200"> {new Date(firstSet.completed_at).toLocaleDateString("en-PH")}{" "} {new Date(firstSet.completed_at).toLocaleDateString("en-PH", {
                                     weekday: "long" , 
                                 })} </p>
 
 
                                 <details> 
-                                    <summary> View Exercises </summary>
-                                    <div className="flex flex-col gap-2 mt-2">
+                                    <summary className="text-sm"> View Exercises </summary>
+                                    <div className="flex flex-col gap-2 mt-2 border rounded-2xl py-2 px-1.5 border-white/10 bg-black">
                                         {sessionSets.map((set)=> (
                                             <div key={set.set_id}>
                                                 <h3 className="flex items-center gap-2">
                                                     <span className="italic text-sm"> {set.exercise_name} </span>
-                                                    <span className="text-sm text-zinc-100"> <span className="font-semibold"> {set.weight_kg} </span> kg x <span className="font-semibold"> {set.reps} </span> reps </span>
+                                                    <span className="text-sm text-zinc-100"> <span className="font-semibold"> {Number(set.weight_kg).toString()} </span> kg x <span className="font-semibold"> {set.reps} </span> reps </span>
                                                 </h3>
                                             </div>
                                         ))}

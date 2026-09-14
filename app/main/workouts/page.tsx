@@ -22,6 +22,40 @@ export default function Workouts() {
     // for creating a session
     const [session, setSession] = useState<any | null>(null);
 
+    // for editing workouts 
+    const [editWorkoutId, setEditWorkoutId] = useState<number | null>(null); 
+
+
+    const handleDeleteExercise = async ( workoutId : number, exerciseId : number )=> {
+
+        try {
+            setLoading(true); 
+            setError(""); 
+
+            const res = await fetch(`/api/workouts/${workoutId}/exercises`, {
+                method: "DELETE", 
+                    headers : {
+                        "Content-Type" : "application/json"
+                    }, body : JSON.stringify({exerciseId : exerciseId})
+                
+            }); 
+            
+            const data  = await res.json(); 
+            if (!res.ok) {
+                setError(data.error || "Cannot delete exercise") ; 
+                return; 
+            }
+
+            setError(""); 
+            await fetchWorkouts(); 
+
+        } catch {
+            setError("Cannot delete exercise") ;
+        } finally {
+            setLoading(false) ; 
+        }
+    }
+    
     const handleRenameWorkout = async (id: string) => {
 
         try {
@@ -43,6 +77,7 @@ export default function Workouts() {
             }
 
             await fetchWorkouts(); 
+            setEditWorkoutId(null); 
 
         } catch {
             setError("Cannot update workout")
@@ -340,32 +375,50 @@ export default function Workouts() {
                                                 </div>
                                                     <p className="text-xs text-zinc-600>"> #{w.id} </p>
                                              </div>
-                                             <details> 
-                                                <summary className="text-sm italic"> Edit workout </summary>
-                                                <div className="flex flex-col my-2 gap-2 "> 
-                                                  
-                                                    <input
-                                                    placeholder="Rename workout"
-                                                    className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
-                                                    value={newName}
-                                                    onChange={(e)=> setNewName(e.target.value)}
-                                                    > 
-                                                    </input>
-                                                    <input
-                                                    placeholder="Change label"
-                                                    className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
-                                                    value={newLabel}
-                                                    onChange={(e)=> setNewLabel(e.target.value)}
-                                                    > 
-                                                    </input>
-
-                                                    <button onClick={()=> handleRenameWorkout(w.id)} 
-                                                    className="text-center text-sm border rounded-2xl hover:scale-105 transition py-2 px-1.5 font-semibold text-black bg-green-500 mt-2"
-                                                    > Save Changes 
-                                                    </button>
+                                             {/* <details> 
+                                                <summary className="text-sm italic"> Edit workout </summary> */}
+                                                {editWorkoutId === w.id && ( 
+                                                    <div className="flex flex-col my-2 gap-2 "> 
                                                     
-                                                </div>
-                                             </details>
+                                                        <input
+                                                        placeholder="Rename workout"
+                                                        className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
+                                                        value={newName}
+                                                        onChange={(e)=> setNewName(e.target.value)}
+                                                        > 
+                                                        </input>
+                                                        <input
+                                                        placeholder="Change label"
+                                                        className="border rounded-md border-white/10 p-2 placeholder:text-zinc-600 placeholder:text-sm bg-white/10"
+                                                        value={newLabel}
+                                                        onChange={(e)=> setNewLabel(e.target.value)}
+                                                        > 
+                                                        </input>
+
+                                                        <button onClick={()=> handleRenameWorkout(w.id)} 
+                                                        className="text-center text-sm border rounded-2xl hover:scale-105 transition py-2 px-1.5 font-semibold text-black bg-green-500 mt-2"
+                                                        > Save Changes 
+                                                        </button>
+
+                                                        <button type="button" onClick={()=> setEditWorkoutId(null)}
+                                                            className="text-center text-sm border rounded-2xl hover:scale-105 transition py-2 px-1.5 font-semibold text-black bg-red-400 mt-2"
+                                                            > Cancel
+                                                        </button>
+                                                        
+                                                    </div>
+                                                 )}
+                                             {/* </details> */}
+
+                                             <button
+                                             type="button"
+                                             onClick={()=> {
+                                                setEditWorkoutId(w.id); 
+                                                setNewName(w.name); 
+                                                setNewLabel(w.label || ""); 
+                                                
+                                             }}
+                                             className="text-left"
+                                             > Edit Workout</button>
 
                                              {w.created_at && (
                                                 <p className="mt-2 text-xs text-zinc-600"> Created at: {w.created_at}</p>
@@ -376,12 +429,27 @@ export default function Workouts() {
                                                     <div className="flex flex-wrap gap-2"> 
 
                                                         {w.exercises.map((e:any)=> 
+                                                            
+                                                            
                                                             <span
                                                             key={e.id}
                                                             className="rounded-full border-white/10 px-2 text-xs text-zinc-300"
                                                             >
-                                                                {e.name}
+                                                             
+                                                                 {e.name} 
+
+                                                                { editWorkoutId  === w.id && (
+                                                                <button
+                                                                type="button"
+                                                                onClick={()=> handleDeleteExercise(w.id, e.id)}
+                                                                className="ml-2 text-red-400"
+                                                                > [x] </button>
+
+                                                                )}
+                                                              
+
                                                             </span>
+                                                           
                                                         )}
                                                     </div>
 

@@ -64,11 +64,12 @@ export async function POST(
   try {
     const userId = await getLoggedInUserId();
     if (!userId) {
+      // check if user is logged in
       return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
     }
 
-    const { id } = await context.params;
-    const { exerciseId } = await request.json();
+    const { id } = await context.params; // get workout id link
+    const { exerciseId } = await request.json(); // get exercise id link
 
     if (!exerciseId) {
       return NextResponse.json(
@@ -78,6 +79,7 @@ export async function POST(
     }
 
     const workoutCheck = await db.query(
+      // check if current workout exists
       `SELECT id FROM workouts
       WHERE id = $1 AND user_id = $2`,
       [id, userId],
@@ -88,6 +90,7 @@ export async function POST(
     }
 
     const exerciseCheck = await db.query(
+      // check if exercises exists before adding
       `SELECT id from exercises
       WHERE id = $1 AND user_id = $2`,
       [exerciseId, userId],
@@ -101,6 +104,7 @@ export async function POST(
     }
 
     const duplicateCheck = await db.query(
+      // check if exercise to be added already exists in the workout
       `SELECT exercise_id FROM workout_exercises
       WHERE workout_id = $1 AND exercise_id = $2`,
       [id, exerciseId],
@@ -114,6 +118,7 @@ export async function POST(
     }
 
     const res = await db.query(
+      // successfully insert the exercise
       `INSERT INTO workout_exercises (workout_id, exercise_id)
       VALUES ($1, $2)
       RETURNING *`,

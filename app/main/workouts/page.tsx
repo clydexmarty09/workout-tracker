@@ -23,9 +23,8 @@ export default function Workouts() {
     const [session, setSession] = useState<any | null>(null);
 
     // for editing workouts 
-    const [editWorkoutId, setEditWorkoutId] = useState<number | null>(null); 
-
-
+    const [editWorkoutId, setEditWorkoutId] = useState<number | null>(null);
+    
     const handleDeleteExercise = async ( workoutId : number, exerciseId : number )=> {
 
         try {
@@ -46,7 +45,6 @@ export default function Workouts() {
                 return; 
             }
 
-            setError(""); 
             await fetchWorkouts(); 
 
         } catch {
@@ -196,6 +194,7 @@ export default function Workouts() {
 
             if(!res.ok) {
                 setError(data.error || "Cannot fetch exercises"); 
+                return;
             }
 
             setExercises(data); 
@@ -282,7 +281,7 @@ export default function Workouts() {
                             <div className="flex items-center justify-between"> 
                                 <div> 
                                     <p className="text-sm font-medium"> Choose exercises</p>
-                                    <p className="text-xs text-zinc-500"> {selectedExercises.length} </p>
+                                    <p className="text-xs text-zinc-500"> {selectedExercises.length} selected </p>
                                 </div>
 
                                 <button 
@@ -334,6 +333,10 @@ export default function Workouts() {
 
 
                 </section>
+
+                {error && editWorkoutId === null && (
+                    <p role="alert" className="text-sm text-red-400">{error}</p>
+                )}
 
                 <section className="flex flex-col border gap-4 rounded-2xl p-4 border-white/10 bg-zinc-950"> 
                     
@@ -404,6 +407,10 @@ export default function Workouts() {
                                                             className="text-center text-sm border rounded-2xl hover:scale-105 transition py-2 px-1.5 font-semibold text-black bg-red-400 mt-2"
                                                             > Cancel
                                                         </button>
+
+                                                        {error && (
+                                                            <p role="alert" className="text-sm text-red-400">{error}</p>
+                                                        )}
                                                         
                                                     </div>
                                                  )}

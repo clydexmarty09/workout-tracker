@@ -56,3 +56,72 @@ export async function DELETE(
     );
   }
 }
+
+export async function POST(
+  request: Request,
+  context: { params: Promise<{ id: string }> },
+) {
+  try {
+    const userId = await getLoggedInUserId();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthenticated" }, { status: 401 });
+    }
+
+    const { id } = await context.params;
+    const { exerciseId } = await request.json();
+
+    if (!exerciseId) {
+      return NextResponse.json(
+        { error: "Exercise ID required" },
+        { status: 400 },
+      );
+    }
+
+    const workoutCheck = await db.query(
+      `SELECT id FROM workouts
+      WHERE id = $1 AND user_id = $2`,
+      [id, userId],
+    );
+
+    if (workoutCheck.rows.length === 0) {
+      return NextResponse.json({ error: "Workout not found" }, { status: 404 });
+    }
+
+    const exerciseCheck = await db.query(
+      `SELECT id from exercises
+      WHERE id = $1 AND user_id = $2`,
+      [exerciseId, userId],
+    );
+
+    if (exerciseCheck.rows.length === 0) {
+      return NextResponse.json(
+        { error: "Exercise not found" },
+        { status: 404 },
+      );
+    }
+
+    const duplicateCheck = await db.query(
+      `SELECT exercise_id FROM workout_exercises
+      WHERE workout_id = $1 AND exercise_id = $2`,
+      [id, exerciseId],
+    );
+
+    if (duplicateCheck.rows.length > 0) {
+      return NextResponse.json(
+        { error: "Exercise is already in this workout" },
+        { status: 409 },
+      );
+    }
+
+    const res = await db.query(
+      `INSERT INTO workout_exercises (workout_id, exercise_id)
+      VALUES ($1, $2)
+      RETURNING *`,
+      [id, exerciseId],
+    );
+
+    return NextResponse.json(res.rows[0], { status: 201 });
+  } catch {
+    return NextResponse.json({ error: "Cannot add exercise" }, { status: 500 });
+  }
+}

@@ -39,7 +39,7 @@ export async function GET() {
 
             WHERE ws.user_id = $1
                 AND ws.status = 'completed'
-            ORDER BY e.name ASC, ss.created_at DESC`,
+            ORDER BY e.name ASC, ss.set_number ASC, ss.created_at ASC`,
       [userId],
     );
 

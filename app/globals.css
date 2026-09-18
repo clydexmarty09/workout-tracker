@@ -51,7 +51,7 @@
   }
 
   .landing-outer {
-    @apply min-h-dvh bg-black flex items-center justify-center; 
+    @apply min-h-dvh flex items-center justify-center; 
   }
 
   .landing-inner {
